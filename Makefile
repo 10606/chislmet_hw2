@@ -1,7 +1,8 @@
 compile_flags= -fsanitize=address -fsanitize=leak -fsanitize=undefined  -fdiagnostics-color=always -fdiagnostics-show-template-tree -fdiagnostics-generate-patch -fdiagnostics-format=text -lmgl2 -lncurses -lgtest -lpthread -lcurl -ljsoncpp -lmongoose -g -Wall -ftemplate-depth=10000 -std=c++17
+source_files=methods/implicit_forward_flow.cpp methods/explicit_forward_flow.cpp methods/implicit_backward_flow.cpp methods/explicit_backward_flow.cpp methods/cheharda.cpp
 
-main: main.cpp
-	g++ ${compile_flags} -o main.cpp.elf main.cpp
+main: main.cpp ${source_files}
+	g++ ${compile_flags} -o main.cpp.elf main.cpp ${source_files}
 
 
 name=example
