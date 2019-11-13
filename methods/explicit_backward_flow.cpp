@@ -21,7 +21,20 @@ explicit_backward_flow
         answer[i][0] = T_t0_values[i];
     }
 
-    //TODO
+    for (size_t cur_t = 1; cur_t != t_size; ++cur_t)
+    {
+        answer[0][cur_t] = 0.; //TODO
+        answer[x_size - 1][cur_t] = 0.; //TODO
+
+        for (size_t cur_x = x_size - 2; cur_x > 0; --cur_x)
+        {
+            answer[cur_x][cur_t] = answer[cur_x][cur_t - 1] +
+                    delta_t * cappa / delta_x / delta_x *
+                        (answer[cur_x - 1][cur_t - 1] - 2. * answer[cur_x][cur_t - 1] + answer[cur_x + 1][cur_t - 1]) -
+                    delta_t * u / delta_x *
+                        (answer[cur_x + 1][cur_t - 1] - answer[cur_x][cur_t - 1]);
+        }
+    }
 
     return answer;
 }
