@@ -2,6 +2,8 @@
 #define PLOTS_UTILS_H
 
 #include <vector>
+#include <type_traits>
+#include <utility>
 
 template <typename T>
 struct pass_T_from_vectors
@@ -83,5 +85,27 @@ std::vector <std::vector <T> > transponse (std::vector <std::vector <T> > const 
     
     return answer;
 }
+
+template <typename F, typename ... T>
+struct apply_function
+{
+    apply_function (T && ... _args) :
+        args(std::forward <T &&> (_args) ...)
+    {}
+    
+    template <size_t ... n>
+    typename std::result_of <F(T && ...)> :: type apply (F && f, std::integer_sequence <size_t, n ...>)
+    {
+        return f(std::forward <T &&> (std::get <n> (args)) ...);
+    }
+    
+    typename std::result_of <F(T && ...)> :: type operator () (F && f)
+    {
+        return apply(f, std::make_index_sequence <sizeof ... (T)>());
+    }
+    
+private:
+    std::tuple <T ...> args;
+};
 
 #endif
