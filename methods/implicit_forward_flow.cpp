@@ -1,5 +1,8 @@
 #include "implicit_forward_flow.h"
 
+#include "method_utils.h"
+#include <cassert>
+
 std::vector <std::vector <double> >  // T[x][t]
 implicit_forward_flow
 (
@@ -9,11 +12,19 @@ implicit_forward_flow
     double cappa,
     std::pair <double, double> x_range, 
     std::pair <double, double> t_range, 
-    std::vector <double> T_t0_values
+    std::vector <double> const & T_t0_values,
+    std::vector <double> const & T_xa_values,
+    std::vector <double> const & T_xb_values
 )
 {
     size_t x_size = (delta_x + x_range.second - x_range.first) / delta_x;
     size_t t_size = (delta_t + t_range.second - t_range.first) / delta_t;
+
+    assert(x_size > 5);
+    assert(t_size > 1);
+
+    double r = cappa * delta_t / (delta_x * delta_x);
+    double s = u * delta_t / delta_x;
 
     std::vector <std::vector <double> > answer(x_size, std::vector <double> (t_size));
     for (size_t i = 0; i != x_size; ++i)
@@ -23,24 +34,23 @@ implicit_forward_flow
 
     for (size_t cur_t = 1; cur_t != t_size; ++cur_t)
     {
-        double t = static_cast <double> (cur_t) * delta_t + t_range.first;
+        answer[0][cur_t]          = T_xa_values[cur_t];
+        answer[x_size - 1][cur_t] = T_xb_values[cur_t];
         
-        answer[0][cur_t] = 0.; //TODO
-        answer[1][cur_t] = 0.; //TODO
-        
-        for (size_t cur_x = 2; cur_x != x_size; ++cur_x)
+        std::vector <quard <double> > system_ur(x_size - 2);
+        system_ur.front() = {0,  (1 - s + 2.*r), -(s + r), (answer[1][cur_t - 1] + r * answer[0][cur_t])};
+        system_ur.back()  = {-r, (1 - s + 2.*r), 0,        (answer[x_size - 2][cur_t - 1] + (s + r) * answer[x_size - 1][cur_t])};
+
+        for (size_t cur_x = 1; cur_x != system_ur.size() - 1; ++cur_x)
         {
-            double x = static_cast <double> (cur_x) * delta_x + x_range.first;
+            system_ur[cur_x] = {-r, (1 - s + 2.*r), -(s + r), answer[cur_x + 1][cur_t - 1]};
+        }
         
-            answer[cur_x][cur_t] =  
-                answer[cur_x - 1][cur_t] * 
-                    (delta_x * delta_x / cappa / delta_t + delta_x * u / cappa + 2.) 
-                - 
-                answer[cur_x - 2][cur_t] * 
-                    (delta_x * u / cappa + 1.)
-                -
-                answer[cur_x - 1][cur_t - 1] * 
-                    (delta_x * delta_x / cappa / delta_t);
+        std::vector <double> cur_x_values = solve_3_diag(system_ur);
+
+        for (size_t cur_x = 0; cur_x != system_ur.size(); ++cur_x)
+        {
+            answer[cur_x + 1][cur_t] = cur_x_values[cur_x];
         }
     }
     

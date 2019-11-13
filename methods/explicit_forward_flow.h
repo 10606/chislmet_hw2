@@ -12,7 +12,9 @@ explicit_forward_flow
     double cappa,
     std::pair <double, double> x_range, 
     std::pair <double, double> t_range, 
-    std::vector <double> T_t0_values
+    std::vector <double> const & T_t0_values,
+    std::vector <double> const & T_xa_values,
+    std::vector <double> const & T_xb_values
 );
 
 #endif
