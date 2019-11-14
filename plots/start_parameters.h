@@ -22,5 +22,15 @@ private:
     double c;
 };
 
+struct T_step : base_parameters
+{
+    T_step (double _a, double _b);
+
+    virtual double operator () (double x);
+
+private:
+    double a;
+    double b;
+};
 
 #endif

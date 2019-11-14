@@ -12,3 +12,15 @@ double T_sin :: operator () (double x)
 {
     return a * std::sin(b * x) + c;
 }
+
+T_step::T_step(double _a, double _b) :
+    a(_a),
+    b(_b)
+{}
+
+double double T_step ::operator() (double x)
+{
+    if (x <= a) return 1.;
+    if (x >= b) return 0.;
+    return x / (b - a) + b / (b - a);
+}

@@ -14,8 +14,8 @@ int main ()
     double u = 0.00279;
     double cappa = 0.00187;
     std::pair <double, double> x_range = {1., 25.};
-    std::pair <double, double> t_range = {1., 20.}; 
-    std::function <double (double)> T_t0_values = T_sin(2., 0.005, 14.);
+    std::pair <double, double> t_range = {1., 20.};
+    std::function <double (double)> T_t0_values = T_step(2., 14.);
     std::function <double (double)> T_xa_values = T_sin(2., 0.001, 19.);
     std::function <double (double)> T_xb_values = T_sin(1., 0.004, 11.);
 
