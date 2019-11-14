@@ -15,6 +15,9 @@ plots_source_files = plots/calc_min_max_and_draw_plots.cpp\
 		     plots/start_parameters.cpp\
 		     plots/visualization.cpp
 
+plots_main: plots/plots_main.cpp ${method_source_files} ${method_source_files}
+	g++ ${compile_flags} -o plots/plots_main.cpp.elf plots/plots_main.cpp ${method_source_files} ${plots_source_files}
+
 main: main.cpp ${method_source_files} ${method_source_files}
 	g++ ${compile_flags} -o main.cpp.elf main.cpp ${method_source_files} ${plots_source_files}
 

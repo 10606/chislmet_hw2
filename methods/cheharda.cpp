@@ -43,6 +43,11 @@ cheharda
             T_xb_values
         );
 
+    for (size_t cur_x = 0; cur_x != x_size; ++cur_x)
+    {
+        answer[cur_x][1] = start_values[cur_x][1];   
+    }
+
     for (size_t cur_t = 2; cur_t != t_size; ++cur_t)
     {
         for (size_t cur_x = 1; cur_x != x_size - 1; ++cur_x)

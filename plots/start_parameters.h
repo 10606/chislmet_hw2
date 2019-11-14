@@ -12,16 +12,14 @@ struct base_parameters
 
 struct T_sin : base_parameters
 {
-    T_sin (double _a, double _b) :
-        a(_a),
-        b(_b)
-    {}
+    T_sin (double _a, double _b, double _c);
     
     virtual double operator () (double x);
 
 private:
     double a;
     double b;
+    double c;
 };
 
 
