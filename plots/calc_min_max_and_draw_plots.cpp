@@ -2,6 +2,16 @@
 
 const std::vector <std::string> plots_color = {"b", "g", "r", "E", "c", "m", "q", "p", "k"};
 
+void relax_min(double & value)
+{
+    value = std::min(value * 0.9, value * 1.1);
+}
+
+void relax_max(double & value)
+{
+    value = std::max(value * 0.9, value * 1.1);
+}
+
 draw_plot::draw_plot
 (
     std::string _name, 
@@ -54,6 +64,10 @@ draw_plot::~draw_plot ()
 {
     std::pair <double, double> range_x = get_min_max <decltype (x_values)> () (x_values);
     std::pair <double, double> range_y = get_min_max <decltype (y_values)> () (y_values);
+    relax_min(range_x.first);
+    relax_min(range_y.first);
+    relax_max(range_x.second);
+    relax_max(range_y.second);
 
     make_plot result
     (
@@ -132,6 +146,20 @@ draw_plots::~draw_plots ()
 {
     std::pair <double, double> range_x = get_min_max <decltype (x_values)> () (x_values);
     std::pair <double, double> range_y = get_min_max <decltype (y_values)> () (y_values);
+
+    std::cout << range_x.first << " " << range_x.second << "\n";
+    std::cout << range_y.first << " " << range_y.second << "\n";
+    std::cout << "\n";
+    
+    relax_min(range_x.first);
+    relax_min(range_y.first);
+    relax_max(range_x.second);
+    relax_max(range_y.second);
+
+    std::cout << range_x.first << " " << range_x.second << "\n";
+    std::cout << range_y.first << " " << range_y.second << "\n";
+    std::cout << "\n";
+    std::cout << "\n";
 
     if (x_values.empty())
     {

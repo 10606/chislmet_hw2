@@ -24,7 +24,7 @@ struct visualization
         std::string _file_name, 
         double _legend_x = 1.0,
         double _legend_y = 0.5,
-        std::pair <size_t, size_t> _size_picture = {1920, 1080}
+        std::pair <size_t, size_t> _size_picture = {1280, 720}
     );
 
     visualization & add (method_type method, std::string method_name);
