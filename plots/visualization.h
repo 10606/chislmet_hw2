@@ -22,8 +22,8 @@ struct visualization
         std::function <double (double)> const & _T_xb_values,
         
         std::string _file_name, 
-        double _legend_x = -0.49,
-        double _legend_y = 1.75,
+        double _legend_x = 1.49,
+        double _legend_y = 1.79,
         std::pair <size_t, size_t> _size_picture = {1280, 720}
     );
 

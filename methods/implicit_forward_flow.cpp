@@ -38,12 +38,12 @@ implicit_forward_flow
         answer[x_size - 1][cur_t] = T_xb_values[cur_t];
         
         std::vector <quard <double> > system_ur(x_size - 2);
-        system_ur.front() = {0,  (1 - s + 2.*r), -(s + r), (answer[1][cur_t - 1] + r * answer[0][cur_t])};
-        system_ur.back()  = {-r, (1 - s + 2.*r), 0,        (answer[x_size - 2][cur_t - 1] + (s + r) * answer[x_size - 1][cur_t])};
+        system_ur.front() = {0,  (1 + s + 2.*r), -(s + r), (answer[1][cur_t - 1] + r * answer[0][cur_t])};
+        system_ur.back()  = {-r, (1 + s + 2.*r), 0,        (answer[x_size - 2][cur_t - 1] + (s + r) * answer[x_size - 1][cur_t])};
 
         for (size_t cur_x = 1; cur_x != system_ur.size() - 1; ++cur_x)
         {
-            system_ur[cur_x] = {-r, (1 - s + 2.*r), -(s + r), answer[cur_x + 1][cur_t - 1]};
+            system_ur[cur_x] = {-r, (1 + s + 2.*r), -(s + r), answer[cur_x + 1][cur_t - 1]};
         }
         
         std::vector <double> cur_x_values = solve_3_diag(system_ur);
