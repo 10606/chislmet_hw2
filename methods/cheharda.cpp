@@ -23,6 +23,9 @@ cheharda
     assert(x_size > 4);
     assert(t_size > 2);
 
+    double r = cappa * delta_t / (delta_x * delta_x);
+    double s = u * delta_t / delta_x;
+
     std::vector <std::vector <double> > answer(x_size, std::vector <double> (t_size));
     for (size_t i = 0; i != x_size; ++i)
     {
@@ -50,12 +53,15 @@ cheharda
 
     for (size_t cur_t = 2; cur_t != t_size; ++cur_t)
     {
+        answer[0][cur_t] = T_xa_values[cur_t];
+        answer[x_size - 1][cur_t] = T_xb_values[cur_t];
+
         for (size_t cur_x = 1; cur_x != x_size - 1; ++cur_x)
         {
             answer[cur_x][cur_t] = 
-                answer[cur_x + 1][cur_t - 1] * (-u * delta_t / delta_x) +
-                answer[cur_x][cur_t - 2] +
-                answer[cur_x - 1][cur_t - 1] * ( u * delta_t / delta_x);
+                answer[cur_x + 1][cur_t - 1] * (r - s) +
+                answer[cur_x][cur_t - 2]     * (1.- 2.*r)+
+                answer[cur_x - 1][cur_t - 1] * (r + s); 
         }
     }
 
