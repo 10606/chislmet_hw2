@@ -2,16 +2,6 @@
 
 const std::vector <std::string> plots_color = {"b", "g", "r", "E", "c", "m", "q", "p", "k"};
 
-void relax_min(double & value)
-{
-    value = std::min(value * 0.9, value * 1.1);
-}
-
-void relax_max(double & value)
-{
-    value = std::max(value * 0.9, value * 1.1);
-}
-
 draw_plot::draw_plot
 (
     std::string _name, 

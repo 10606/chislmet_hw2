@@ -2,12 +2,13 @@
 
 #include "calc_min_max_and_draw_plots.h"
 #include <sstream>
+#include <iomanip>
 
-std::string visualization::format (double value, size_t precision = 5)
+std::string visualization::format (double value, size_t precision = 5, size_t width = 10)
 {
     std::stringstream ss;
     ss.precision(precision);
-    ss << std::fixed << value;
+    ss << std::setw(width) << std::fixed << value;
 
     return ss.str();
 }
@@ -64,30 +65,61 @@ visualization::visualization
     ),
     x()
 {
-    size_t x_size = (delta_x + x_range.second - x_range.first) / delta_x;
-    size_t t_size = (delta_t + t_range.second - t_range.first) / delta_t;
+    visualization::calc_xab_t0_x
+    (
+        T_t0_values,
+        T_xa_values,
+        T_xb_values,
+        x, //[x][t]
+        delta_x,
+        delta_t,
+        x_range,
+        t_range,
+        _T_t0_values,
+        _T_xa_values,
+        _T_xb_values
+    );
+}
 
-    x.resize(x_size, std::vector <double> (t_size));
+void visualization::calc_xab_t0_x
+(
+    std::vector <double> & _T_t0_values,
+    std::vector <double> & _T_xa_values,
+    std::vector <double> & _T_xb_values,
+    std::vector <std::vector <double> > & _x, //[x][t]
+    double _delta_x,
+    double _delta_t,
+    std::pair <double, double> _x_range,
+    std::pair <double, double> _t_range,
+    std::function <double (double)> const & f_T_t0_values,
+    std::function <double (double)> const & f_T_xa_values,
+    std::function <double (double)> const & f_T_xb_values
+)
+{
+    size_t x_size = (_delta_x + _x_range.second - _x_range.first) / _delta_x;
+    size_t t_size = (_delta_t + _t_range.second - _t_range.first) / _delta_t;
+
+    _x.resize(x_size, std::vector <double> (t_size));
 
     for (size_t cur_t = 0; cur_t != t_size; ++cur_t)
     {
-        double t_value = t_range.first + static_cast <double> (cur_t) * delta_t;
-        T_xa_values.push_back(_T_xa_values(t_value));
-        T_xb_values.push_back(_T_xb_values(t_value));
+        double t_value = _t_range.first + static_cast <double> (cur_t) * _delta_t;
+        _T_xa_values.push_back(f_T_xa_values(t_value));
+        _T_xb_values.push_back(f_T_xb_values(t_value));
     }
 
     for (size_t cur_x = 0; cur_x != x_size; ++cur_x)
     {
-        double x_value = x_range.first + static_cast <double> (cur_x) * delta_x;
-        T_t0_values.push_back(_T_t0_values(x_value));
+        double x_value = _x_range.first + static_cast <double> (cur_x) * _delta_x;
+        _T_t0_values.push_back(f_T_t0_values(x_value));
     }
 
     for (size_t cur_t = 0; cur_t != t_size; ++cur_t)
     {
         for (size_t cur_x = 0; cur_x != x_size; ++cur_x)
         {
-            double x_value = x_range.first + static_cast <double> (cur_x) * delta_x;
-            x[cur_x][cur_t] = x_value;
+            double x_value = _x_range.first + static_cast <double> (cur_x) * _delta_x;
+            _x[cur_x][cur_t] = x_value;
         }
     }
 }
@@ -108,6 +140,65 @@ visualization & visualization::add (method_type method, std::string method_name)
             T_t0_values,
             T_xa_values,
             T_xb_values
+        ), 
+        method_name
+    );
+    
+    return * this;
+}
+
+
+visualization & visualization::add 
+(
+    method_type method, 
+    std::string method_name,
+    
+    double _delta_x,
+    double _delta_t,
+    double _u,
+    double _cappa,
+    std::pair <double, double> _x_range, 
+    std::pair <double, double> _t_range, 
+    std::function <double (double)> const & f_T_t0_values,
+    std::function <double (double)> const & f_T_xa_values,
+    std::function <double (double)> const & f_T_xb_values
+)
+{
+    std::vector <double> _T_t0_values;
+    std::vector <double> _T_xa_values;
+    std::vector <double> _T_xb_values;
+
+    std::vector <std::vector <double> > _x; //[x][t]
+
+    visualization::calc_xab_t0_x
+    (
+        _T_t0_values,
+        _T_xa_values,
+        _T_xb_values,
+        _x, //[x][t]
+        _delta_x,
+        _delta_t,
+        _x_range,
+        _t_range,
+        f_T_t0_values,
+        f_T_xa_values,
+        f_T_xb_values
+    );
+
+    plots.add
+    (
+        _x, 
+        method
+        (
+            _delta_x,
+            _delta_t,
+            _u,
+            _cappa,
+            _x_range,
+            _t_range,
+            _T_t0_values,
+            _T_xa_values,
+            _T_xb_values
         ), 
         method_name
     );

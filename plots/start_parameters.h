@@ -7,14 +7,14 @@ typedef double (* T_xb) (double b, double t);
 
 struct base_parameters
 {
-    virtual double operator () (double) = 0;
+    virtual double operator () (double) noexcept = 0;
 };
 
 struct T_sin : base_parameters
 {
-    T_sin (double _a, double _b, double _c);
+    T_sin (double _a, double _b, double _c) noexcept;
     
-    virtual double operator () (double x);
+    virtual double operator () (double x) noexcept;
 
 private:
     double a;
@@ -24,9 +24,9 @@ private:
 
 struct T_step : base_parameters
 {
-    T_step (double _a, double _b);
+    T_step (double _a, double _b) noexcept;
 
-    virtual double operator () (double x);
+    virtual double operator () (double x) noexcept;
 
 private:
     double a;

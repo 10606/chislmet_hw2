@@ -1,6 +1,6 @@
 #include "cheharda.h"
 
-#include "implicit_forward_flow.h"
+#include "implicit_backward_flow.h"
 #include <cassert>
 
 std::vector <std::vector <double> >  // T[x][t]
@@ -30,7 +30,7 @@ cheharda
     }
 
     std::vector <std::vector <double> > start_values = 
-        implicit_forward_flow
+        implicit_backward_flow
         (
             delta_x,
             delta_t,

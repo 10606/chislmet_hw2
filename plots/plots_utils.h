@@ -24,7 +24,7 @@ struct get_min_max
     get_min_max ()
     {}
 
-    std::pair <T, T> operator () (T const & values)
+    inline std::pair <T, T> operator () (T const & values) noexcept
     {
         return {values, values};
     }
@@ -38,7 +38,7 @@ struct get_min_max <std::vector <T> >
 
     typedef typename pass_T_from_vectors <T> :: type type;
 
-    std::pair <type, type> operator () (std::vector <T> const & values)
+    inline std::pair <type, type> operator () (std::vector <T> const & values) noexcept
     {
         if (values.empty())
         {
@@ -60,7 +60,7 @@ struct get_min_max <std::vector <T> >
 };
 
 template <typename T>
-std::vector <std::vector <T> > transponse (std::vector <std::vector <T> > const & values)
+inline std::vector <std::vector <T> > transponse (std::vector <std::vector <T> > const & values)
 {
     if (values.empty())
     {
@@ -94,12 +94,12 @@ struct apply_function
     {}
     
     template <size_t ... n>
-    typename std::result_of <F(T && ...)> :: type apply (F && f, std::integer_sequence <size_t, n ...>)
+    inline typename std::result_of <F(T && ...)> :: type apply (F && f, std::integer_sequence <size_t, n ...>)
     {
         return f(std::forward <T &&> (std::get <n> (args)) ...);
     }
     
-    typename std::result_of <F(T && ...)> :: type operator () (F && f)
+    inline typename std::result_of <F(T && ...)> :: type operator () (F && f)
     {
         return apply(f, std::make_index_sequence <sizeof ... (T)>());
     }
@@ -107,5 +107,16 @@ struct apply_function
 private:
     std::tuple <T ...> args;
 };
+
+inline void relax_min(double & value) noexcept
+{
+    value = std::min(value * 0.9, value * 1.1);
+}
+
+inline void relax_max(double & value) noexcept
+{
+    value = std::max(value * 0.9, value * 1.1);
+}
+
 
 #endif

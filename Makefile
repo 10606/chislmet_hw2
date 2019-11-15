@@ -1,5 +1,5 @@
 release_flags = -lmgl2 -lpthread\
-		-O3 -g -Wall -ftemplate-depth=10000 -std=c++17
+		-O3 -mtune=native -march=native -g -Wall -ftemplate-depth=10000 -std=c++17
 
 compile_flags = -fsanitize=address -fsanitize=leak -fsanitize=undefined \
 		-fdiagnostics-color=always -fdiagnostics-show-template-tree -fdiagnostics-generate-patch -fdiagnostics-format=text\

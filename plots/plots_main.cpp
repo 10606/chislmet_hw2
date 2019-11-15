@@ -34,10 +34,10 @@ int main ()
         "pictures/example-"
     );
 
-    vis.add(implicit_forward_flow,  "implicit\\_forward");
-    //vis.add(implicit_backward_flow, "implicit\\_backward");
-    //vis.add(explicit_forward_flow,  "explicit\\_forward");
-    //vis.add(explicit_backward_flow, "explicit\\_backward");
-    //vis.add(cheharda,               "cheharda");
+    //vis.add(implicit_forward_flow,  "implicit\\_forward");
+    vis.add(implicit_backward_flow, "implicit\\_backward");
+    vis.add(explicit_forward_flow,  "explicit\\_forward");
+    vis.add(explicit_backward_flow, "explicit\\_backward");
+    vis.add(cheharda,               "cheharda");
 }
 

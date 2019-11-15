@@ -6,9 +6,6 @@
 
 extern const std::vector <std::string> plots_color;
 
-void relax_min(double & value);
-void relax_max(double & value);
-
 struct draw_plot
 {
     draw_plot
