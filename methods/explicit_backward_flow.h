@@ -10,8 +10,8 @@ explicit_backward_flow
     double delta_t,
     double u,
     double cappa,
-    std::pair <double, double> x_range, 
-    std::pair <double, double> t_range, 
+    size_t x_size, 
+    size_t t_size, 
     std::vector <double> const & T_t0_values,
     std::vector <double> const & T_xa_values,
     std::vector <double> const & T_xb_values

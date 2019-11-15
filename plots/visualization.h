@@ -34,12 +34,8 @@ struct visualization
         method_type method, 
         std::string method_name,
         
-        double _delta_x,
-        double _delta_t,
         double _u,
         double _cappa,
-        std::pair <double, double> _x_range, 
-        std::pair <double, double> _t_range, 
         std::function <double (double)> const & _T_t0_values,
         std::function <double (double)> const & _T_xa_values,
         std::function <double (double)> const & _T_xb_values

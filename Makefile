@@ -11,7 +11,8 @@ method_source_files = methods/implicit_forward_flow.cpp\
 		      methods/implicit_backward_flow.cpp\
 		      methods/explicit_backward_flow.cpp\
 		      methods/cheharda.cpp\
-		      methods/method_utils.cpp
+		      methods/method_utils.cpp\
+		      methods/common_implicit.cpp
 
 plots_source_files = plots/calc_min_max_and_draw_plots.cpp\
 		     plots/plots.cpp\

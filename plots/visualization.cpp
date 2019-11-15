@@ -1,6 +1,7 @@
 #include "visualization.h"
 
 #include "calc_min_max_and_draw_plots.h"
+#include "../methods/method_utils.h"
 #include <sstream>
 #include <iomanip>
 
@@ -96,8 +97,8 @@ void visualization::calc_xab_t0_x
     std::function <double (double)> const & f_T_xb_values
 )
 {
-    size_t x_size = (_delta_x + _x_range.second - _x_range.first) / _delta_x;
-    size_t t_size = (_delta_t + _t_range.second - _t_range.first) / _delta_t;
+    size_t x_size = get_size(_x_range, _delta_x);
+    size_t t_size = get_size(_t_range, _delta_t);
 
     _x.resize(x_size, std::vector <double> (t_size));
 
@@ -135,8 +136,8 @@ visualization & visualization::add (method_type method, std::string method_name)
             delta_t,
             u,
             cappa,
-            x_range,
-            t_range,
+            get_size(x_range, delta_x),
+            get_size(t_range, delta_t),
             T_t0_values,
             T_xa_values,
             T_xb_values
@@ -153,12 +154,8 @@ visualization & visualization::add
     method_type method, 
     std::string method_name,
     
-    double _delta_x,
-    double _delta_t,
     double _u,
     double _cappa,
-    std::pair <double, double> _x_range, 
-    std::pair <double, double> _t_range, 
     std::function <double (double)> const & f_T_t0_values,
     std::function <double (double)> const & f_T_xa_values,
     std::function <double (double)> const & f_T_xb_values
@@ -176,10 +173,10 @@ visualization & visualization::add
         _T_xa_values,
         _T_xb_values,
         _x, //[x][t]
-        _delta_x,
-        _delta_t,
-        _x_range,
-        _t_range,
+        delta_x,
+        delta_t,
+        x_range,
+        t_range,
         f_T_t0_values,
         f_T_xa_values,
         f_T_xb_values
@@ -190,12 +187,12 @@ visualization & visualization::add
         _x, 
         method
         (
-            _delta_x,
-            _delta_t,
+            delta_x,
+            delta_t,
             _u,
             _cappa,
-            _x_range,
-            _t_range,
+            get_size(x_range, delta_x),
+            get_size(t_range, delta_t),
             _T_t0_values,
             _T_xa_values,
             _T_xb_values
