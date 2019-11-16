@@ -29,6 +29,6 @@ implicit_forward_flow
         T_xa_values,
         T_xb_values,
         r,
-        (s + r)
+        (r - s)
     );
 }

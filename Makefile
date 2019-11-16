@@ -6,28 +6,31 @@ compile_flags = -fsanitize=address -fsanitize=leak -fsanitize=undefined \
 		-lmgl2 -lpthread\
 		-g -Wall -ftemplate-depth=10000 -std=c++17
 
-method_source_files = methods/implicit_forward_flow.cpp\
-		      methods/explicit_forward_flow.cpp\
-		      methods/implicit_backward_flow.cpp\
-		      methods/explicit_backward_flow.cpp\
-		      methods/cheharda.cpp\
-		      methods/method_utils.cpp\
-		      methods/common_implicit.cpp
+method_object_files = methods/implicit_forward_flow.o\
+		      methods/explicit_forward_flow.o\
+		      methods/implicit_backward_flow.o\
+		      methods/explicit_backward_flow.o\
+		      methods/cheharda.o\
+		      methods/method_utils.o\
+		      methods/common_implicit.o
 
-plots_source_files = plots/calc_min_max_and_draw_plots.cpp\
-		     plots/plots.cpp\
-		     plots/start_parameters.cpp\
-		     plots/visualization.cpp
+plots_object_files = plots/calc_min_max_and_draw_plots.o\
+		     plots/plots.o\
+		     plots/start_parameters.o\
+		     plots/visualization.o
 
 pictures: plots_main
 	rm pictures/*
 	plots/plots_main.cpp.elf
 
-plots_main: plots/plots_main.cpp ${method_source_files} ${method_source_files}
-	g++ ${release_flags} -o plots/plots_main.cpp.elf plots/plots_main.cpp ${method_source_files} ${plots_source_files}
+plots_main: plots/plots_main.cpp ${plots_object_files} ${method_object_files}
+	g++ ${release_flags} -o plots/plots_main.cpp.elf plots/plots_main.cpp ${method_object_files} ${plots_object_files}
 
-main: main.cpp ${method_source_files} ${method_source_files}
-	g++ ${compile_flags} -o main.cpp.elf main.cpp ${method_source_files} ${plots_source_files}
+main: main.cpp ${method_object_files} ${method_object_files}
+	g++ ${compile_flags} -o main.cpp.elf main.cpp ${method_object_files} ${plots_object_files}
+
+%.o: %.cpp
+	g++ ${release_flags} -c -o $@ $^
 
 picture_name = pictures/example
 video_name = pictures/video
