@@ -1,5 +1,8 @@
 #include "cheharda.h"
 
+#include "explicit_forward_flow.h"
+#include "explicit_backward_flow.h"
+#include "implicit_forward_flow.h"
 #include "implicit_backward_flow.h"
 #include "method_utils.h"
 #include <cassert>
@@ -28,7 +31,7 @@ cheharda
     fill_0_column(answer, T_t0_values);
 
     std::vector <std::vector <double> > start_values = 
-        implicit_backward_flow
+        implicit_forward_flow
         (
             delta_x,
             delta_t,
@@ -54,9 +57,10 @@ cheharda
         for (size_t cur_x = 1; cur_x != x_size - 1; ++cur_x)
         {
             answer[cur_x][cur_t] = 
-                answer[cur_x + 1][cur_t - 1] * (r - s) +
-                answer[cur_x][cur_t - 2]     * (1.- 2.*r)+
-                answer[cur_x - 1][cur_t - 1] * (r + s); 
+                (answer[cur_x + 1][cur_t - 1] * (-s + 2.*r) +
+                answer[cur_x - 1][cur_t - 1] * (s + 2.*r) + 
+                answer[cur_x    ][cur_t - 2] * (1.- 2.*r))
+                /  (1 + 2.*r);
         }
     }
 

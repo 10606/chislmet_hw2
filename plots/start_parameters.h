@@ -33,4 +33,17 @@ private:
     double b;
 };
 
+struct T_rectangle : base_parameters
+{
+    T_rectangle (double _a, double _b, double _c, double _d) noexcept;
+
+    virtual double operator () (double x) noexcept;
+
+private:
+    double a;
+    double b;
+    double c;
+    double d;
+};
+
 #endif
