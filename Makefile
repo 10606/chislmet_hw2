@@ -1,9 +1,17 @@
-release_flags = -lmgl2 -lpthread\
+OS=$(shell lsb_release -si)
+
+ifeq ($(OS),Ubuntu)
+	mgl_flag = -lmgl
+else
+	mgl_flag = -lmgl2
+endif
+
+release_flags = -lpthread\
 		-O3 -mtune=native -march=native -g -Wall -ftemplate-depth=10000 -std=c++17
 
 compile_flags = -fsanitize=address -fsanitize=leak -fsanitize=undefined \
 		-fdiagnostics-color=always -fdiagnostics-show-template-tree -fdiagnostics-generate-patch -fdiagnostics-format=text\
-		-lmgl2 -lpthread\
+		-lpthread\
 		-g -Wall -ftemplate-depth=10000 -std=c++17
 
 method_object_files = methods/implicit_forward_flow.o\
@@ -24,13 +32,13 @@ pictures: plots_main
 	plots/plots_main.cpp.elf
 
 plots_main: plots/plots_main.cpp ${plots_object_files} ${method_object_files}
-	g++ ${release_flags} -o plots/plots_main.cpp.elf plots/plots_main.cpp ${method_object_files} ${plots_object_files}
+	g++ ${release_flags} -o plots/plots_main.cpp.elf plots/plots_main.cpp ${method_object_files} ${plots_object_files} ${lmgl_flag}
 
 main: main.cpp ${method_object_files} ${method_object_files}
-	g++ ${compile_flags} -o main.cpp.elf main.cpp ${method_object_files} ${plots_object_files}
+	g++ ${compile_flags} -o main.cpp.elf main.cpp ${method_object_files} ${plots_object_files} ${lmgl_flag}
 
 %.o: %.cpp
-	g++ ${release_flags} -c -o $@ $^
+	g++ ${release_flags} -c -o $@ $^ ${lmgl_flag}
 
 picture_name = pictures/example
 video_name = pictures/video
