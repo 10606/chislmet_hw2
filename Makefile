@@ -32,13 +32,13 @@ pictures: plots_main
 	plots/plots_main.cpp.elf
 
 plots_main: plots/plots_main.cpp ${plots_object_files} ${method_object_files}
-	g++ ${release_flags} -o plots/plots_main.cpp.elf plots/plots_main.cpp ${method_object_files} ${plots_object_files} ${lmgl_flag}
+	g++ ${release_flags} -o plots/plots_main.cpp.elf plots/plots_main.cpp ${method_object_files} ${plots_object_files} ${mgl_flag}
 
 main: main.cpp ${method_object_files} ${method_object_files}
-	g++ ${compile_flags} -o main.cpp.elf main.cpp ${method_object_files} ${plots_object_files} ${lmgl_flag}
+	g++ ${compile_flags} -o main.cpp.elf main.cpp ${method_object_files} ${plots_object_files} ${mgl_flag}
 
 %.o: %.cpp
-	g++ ${release_flags} -c -o $@ $^ ${lmgl_flag}
+	g++ ${release_flags} -c -o $@ $^ ${mgl_flag}
 
 picture_name = pictures/example
 video_name = pictures/video
