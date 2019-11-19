@@ -4,8 +4,8 @@ const std::vector <std::string> plots_color = {"b", "g", "r", "E", "c", "m", "q"
 
 draw_plot::draw_plot
 (
-    std::string _name, 
-    std::string _file_name, 
+    std::string _name,
+    std::string _file_name,
     std::string _axis_x,
     std::string _axis_y,
     bool _has_legend,
@@ -61,9 +61,9 @@ draw_plot::~draw_plot ()
 
     make_plot result
     (
-        name, 
-        file_name, 
-        range_x, 
+        name,
+        file_name,
+        range_x,
         range_y,
         axis_x,
         axis_y,
@@ -78,7 +78,7 @@ draw_plot::~draw_plot ()
         result.add(x_values[i], y_values[i], legend_names[i].first, legend_names[i].second);
     }
 }
-    
+
 
 
 
@@ -86,8 +86,8 @@ draw_plot::~draw_plot ()
 
 draw_plots::draw_plots
 (
-    std::vector <std::string> _name, 
-    std::string _file_name, 
+    std::vector <std::string> _name,
+    std::string _file_name,
     std::string _axis_x,
     std::string _axis_y,
     bool _has_legend,
@@ -137,19 +137,19 @@ draw_plots::~draw_plots ()
     std::pair <double, double> range_x = get_min_max <decltype (x_values)> () (x_values);
     std::pair <double, double> range_y = get_min_max <decltype (y_values)> () (y_values);
 
-    std::cout << range_x.first << " " << range_x.second << "\n";
-    std::cout << range_y.first << " " << range_y.second << "\n";
+    //std::cout << range_x.first << " " << range_x.second << "\n";
+    //std::cout << range_y.first << " " << range_y.second << "\n";
     std::cout << "\n";
-    
+
     relax_min(range_x.first);
     relax_min(range_y.first);
     relax_max(range_x.second);
     relax_max(range_y.second);
 
-    std::cout << range_x.first << " " << range_x.second << "\n";
-    std::cout << range_y.first << " " << range_y.second << "\n";
-    std::cout << "\n";
-    std::cout << "\n";
+    //std::cout << range_x.first << " " << range_x.second << "\n";
+    //std::cout << range_y.first << " " << range_y.second << "\n";
+    //std::cout << "\n";
+    //std::cout << "\n";
 
     if (x_values.empty())
     {
@@ -160,9 +160,9 @@ draw_plots::~draw_plots ()
     {
         make_plot result
         (
-            name[j], 
+            name[j],
             file_name + std::to_string(j),
-            range_x, 
+            range_x,
             range_y,
             axis_x,
             axis_y,
@@ -178,4 +178,3 @@ draw_plots::~draw_plots ()
         }
     }
 }
-    
