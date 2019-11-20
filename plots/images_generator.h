@@ -8,5 +8,6 @@ void generate_images
     double u,
     double kappa,
     std::pair <double, double> x_range,
-    std::pair <double, double> t_range
+    std::pair <double, double> t_range,
+    bool implicit_only
 );

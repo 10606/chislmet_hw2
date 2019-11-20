@@ -43,13 +43,12 @@ pictures: plots_main
 plots_main: plots/plots_main.cpp ${plots_object_files} ${method_object_files}
 	g++ ${release_flags} -o plots/plots_main.cpp.elf plots/plots_main.cpp ${method_object_files} ${plots_object_files} ${mgl_flag}
 
-main: main.cpp ${plots_object_files} ${method_object_files}
+main.cpp.elf: main.cpp ${plots_object_files} ${method_object_files}
 	g++ ${release_flags} -o main.cpp.elf main.cpp ${method_object_files} ${plots_object_files} ${mgl_flag}
 
-run_main: main
+run_main: main.cpp.elf
 	rm -rf pictures/*
 	./main.cpp.elf
-	make video
 
 %.o: %.cpp
 	g++ ${release_flags} -c -o $@ $^ ${mgl_flag}

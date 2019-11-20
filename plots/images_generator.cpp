@@ -14,10 +14,11 @@ void generate_images
     double u,
     double kappa,
     std::pair <double, double> x_range,
-    std::pair <double, double> t_range
+    std::pair <double, double> t_range,
+    bool implicit_only
 )
 {
-    std::function <double (double)> T_t0_values = T_rectangle(2., 3., 7., 11.);
+    std::function <double (double)> T_t0_values = T_step(2., 3.);
     std::function <double (double)> T_xa_values = T_sin(2., 0.000, 0.);
     std::function <double (double)> T_xb_values = T_sin(1., 0.000, 0.);
 
@@ -40,7 +41,9 @@ void generate_images
 
     vis.add(implicit_forward_flow,  "implicit\\_forward");
     vis.add(implicit_backward_flow, "implicit\\_backward");
-    vis.add(explicit_forward_flow,  "explicit\\_forward");
-    vis.add(explicit_backward_flow, "explicit\\_backward");
+    if (!implicit_only) {
+        vis.add(explicit_forward_flow,  "explicit\\_forward");
+        vis.add(explicit_backward_flow, "explicit\\_backward");
+    }
     vis.add(cheharda,               "cheharda");
 }

@@ -24,8 +24,11 @@ int main ()
     t_range.first = 0;
     std::cout << "simulation_time = ";
     std::cin >> t_range.second;
+    std::cout << "implicit only? (y/n): ";
+    std::string s;
+    std::cin >> s;
     std::cout << std::endl;
     std::cout << "r = " << calc_r(u, kappa, delta_x, delta_t) << std::endl;
     std::cout << "s = " << calc_s(u, kappa, delta_x, delta_t) << std::endl;
-    generate_images(delta_x, delta_t, u, kappa, x_range, t_range);
+    generate_images(delta_x, delta_t, u, kappa, x_range, t_range, (s == "y"));
 }
