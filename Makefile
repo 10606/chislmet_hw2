@@ -28,6 +28,10 @@ plots_object_files = plots/calc_min_max_and_draw_plots.o\
 		     plots/visualization.o\
 				 plots/images_generator.o
 
+run_main: main.cpp.elf
+		rm -rf pictures/*
+		./main.cpp.elf
+
 clean:
 	rm -rf plots/*.o
 	rm -rf methods/*.o
@@ -46,10 +50,6 @@ plots_main: plots/plots_main.cpp ${plots_object_files} ${method_object_files}
 main.cpp.elf: main.cpp ${plots_object_files} ${method_object_files}
 	g++ ${release_flags} -o main.cpp.elf main.cpp ${method_object_files} ${plots_object_files} ${mgl_flag}
 
-run_main: main.cpp.elf
-	rm -rf pictures/*
-	./main.cpp.elf
-
 %.o: %.cpp
 	g++ ${release_flags} -c -o $@ $^ ${mgl_flag}
 
@@ -65,3 +65,4 @@ encoder = libx264
 
 video:
 	ffmpeg -r ${frame_rate} -i ${picture_name}-%d.png -codec:v ${encoder} -filter:v "fps=${fps}, format=${pix_fmts}, scale=${resolution}" ${video_name}.mp4
+	mpv pictures/video.mp4
