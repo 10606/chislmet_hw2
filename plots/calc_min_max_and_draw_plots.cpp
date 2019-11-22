@@ -11,7 +11,9 @@ draw_plot::draw_plot
     bool _has_legend,
     double _legend_x,
     double _legend_y,
-    std::pair <size_t, size_t> _size_picture
+    std::pair <size_t, size_t> _size_picture,
+    std::pair <double, double> _hard_border_x,
+    std::pair <double, double> _hard_border_y
 ) :
     name(_name),
     file_name(_file_name),
@@ -21,6 +23,8 @@ draw_plot::draw_plot
     legend_x(_legend_x),
     legend_y(_legend_y),
     size_picture(_size_picture),
+    hard_border_x(_hard_border_x),
+    hard_border_y(_hard_border_y),
 
     color_pos(0),
     x_values(),
@@ -58,6 +62,8 @@ draw_plot::~draw_plot ()
     relax_min(range_y.first);
     relax_max(range_x.second);
     relax_max(range_y.second);
+    relax_hard(range_x, hard_border_x);
+    relax_hard(range_y, hard_border_y);
 
     make_plot result
     (
@@ -93,7 +99,9 @@ draw_plots::draw_plots
     bool _has_legend,
     double _legend_x,
     double _legend_y,
-    std::pair <size_t, size_t> _size_picture
+    std::pair <size_t, size_t> _size_picture,
+    std::pair <double, double> _hard_border_x,
+    std::pair <double, double> _hard_border_y
 ) :
     name(_name),
     file_name(_file_name),
@@ -103,6 +111,8 @@ draw_plots::draw_plots
     legend_x(_legend_x),
     legend_y(_legend_y),
     size_picture(_size_picture),
+    hard_border_x(_hard_border_x),
+    hard_border_y(_hard_border_y),
 
     color_pos(0),
     x_values(),
@@ -145,6 +155,13 @@ draw_plots::~draw_plots ()
     relax_min(range_y.first);
     relax_max(range_x.second);
     relax_max(range_y.second);
+
+    std::cout << range_x.first << " " << range_x.second << "\n";
+    std::cout << range_y.first << " " << range_y.second << "\n";
+    std::cout << "\n";
+
+    relax_hard(range_x, hard_border_x);
+    relax_hard(range_y, hard_border_y);
 
     std::cout << range_x.first << " " << range_x.second << "\n";
     std::cout << range_y.first << " " << range_y.second << "\n";

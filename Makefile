@@ -1,3 +1,8 @@
+.DEFAULT: pictures
+.PHONY: pictures video
+
+
+
 OS=$(shell lsb_release -si)
 
 ifeq ($(OS),Ubuntu)
@@ -14,6 +19,22 @@ compile_flags = -fsanitize=address -fsanitize=leak -fsanitize=undefined \
 		-lpthread\
 		-g -Wall -ftemplate-depth=10000 -std=c++17
 
+header_method_files = 	methods/cheharda.h\
+			methods/common_implicit.h\
+			methods/explicit_backward_flow.h\
+			methods/explicit_forward_flow.h\
+			methods/implicit_backward_flow.h\
+			methods/implicit_forward_flow.h\
+			methods/method_utils.h\
+
+header_plots_files =	plots/calc_min_max_and_draw_plots.h\
+			plots/plots.h\
+			plots/plots_utils.h\
+			plots/start_parameters.h\
+			plots/visualization.h\
+			utils.h
+
+
 method_object_files = methods/implicit_forward_flow.o\
 		      methods/explicit_forward_flow.o\
 		      methods/implicit_backward_flow.o\
@@ -27,18 +48,22 @@ plots_object_files = plots/calc_min_max_and_draw_plots.o\
 		     plots/start_parameters.o\
 		     plots/visualization.o
 
-pictures: plots_main
-	rm pictures/*
+pictures: plots/plots_main.cpp.elf
+	-mkdir pictures
+	-rm pictures/*
 	plots/plots_main.cpp.elf
 
-plots_main: plots/plots_main.cpp ${plots_object_files} ${method_object_files}
-	g++ ${release_flags} -o plots/plots_main.cpp.elf plots/plots_main.cpp ${method_object_files} ${plots_object_files} ${mgl_flag}
+plots/plots_main.cpp.elf: plots/plots_main.o ${plots_object_files} ${method_object_files}
+	g++ ${release_flags} -o plots/plots_main.cpp.elf plots/plots_main.o ${method_object_files} ${plots_object_files} ${mgl_flag}
 
-main: main.cpp ${method_object_files} ${method_object_files}
+main.cpp.elf: main.cpp ${method_object_files} ${method_object_files}
 	g++ ${compile_flags} -o main.cpp.elf main.cpp ${method_object_files} ${plots_object_files} ${mgl_flag}
 
-%.o: %.cpp
-	g++ ${release_flags} -c -o $@ $^ ${mgl_flag}
+methods/%.o: methods/%.cpp ${header_method_files}
+	g++ ${release_flags} -c -o $@ $< ${mgl_flag}
+
+plots/%.o: plots/%.cpp ${header_plots_files}
+	g++ ${release_flags} -c -o $@ $< ${mgl_flag}
 
 picture_name = pictures/example
 video_name = pictures/video

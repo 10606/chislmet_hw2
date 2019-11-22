@@ -17,7 +17,9 @@ struct draw_plot
         bool _has_legend = 1,
         double _legend_x = 1.0,
         double _legend_y = 0.5,
-        std::pair <size_t, size_t> _size_picture = {1920, 1080}
+        std::pair <size_t, size_t> _size_picture = {1920, 1080},
+        std::pair <double, double> _hard_border_x = {- std::numeric_limits <double> :: infinity(), std::numeric_limits <double> :: infinity()},
+        std::pair <double, double> _hard_border_y = {-100., 100.}
     );
     
     void add
@@ -40,6 +42,8 @@ private:
     double legend_x;
     double legend_y;
     std::pair <size_t, size_t> size_picture;
+    std::pair <double, double> const hard_border_x;
+    std::pair <double, double> const hard_border_y;
 
 
     size_t color_pos;
@@ -62,7 +66,9 @@ struct draw_plots
         bool _has_legend = 1,
         double _legend_x = 1.0,
         double _legend_y = 0.5,
-        std::pair <size_t, size_t> _size_picture = {1920, 1080}
+        std::pair <size_t, size_t> _size_picture = {1920, 1080},
+        std::pair <double, double> _hard_border_x = {- std::numeric_limits <double> :: infinity(), std::numeric_limits <double> :: infinity()},
+        std::pair <double, double> _hard_border_y = {-100., 100.}
     );
 
     void add
@@ -85,6 +91,8 @@ private:
     double legend_x;
     double legend_y;
     std::pair <size_t, size_t> size_picture;
+    std::pair <double, double> hard_border_x;
+    std::pair <double, double> hard_border_y;
 
 
     size_t color_pos;
