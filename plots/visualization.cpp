@@ -41,7 +41,10 @@ visualization::visualization
     std::string _file_name, 
     double _legend_x,
     double _legend_y,
-    std::pair <size_t, size_t> _size_picture
+    std::pair <size_t, size_t> _size_picture,
+    std::pair <double, double> _hard_border_x,
+    std::pair <double, double> _hard_border_y,
+    size_t _step
 ) :
     delta_x(_delta_x),
     delta_t(_delta_t),
@@ -61,8 +64,11 @@ visualization::visualization
         "T",
         1,
         _legend_x,
-         _legend_y,
-        _size_picture
+        _legend_y,
+        _size_picture,
+        _hard_border_x,
+        _hard_border_y,
+        _step
     ),
     x()
 {

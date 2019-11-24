@@ -37,7 +37,11 @@ int main ()
         
         "pictures/example-",
         1.49,
-        1.5
+        1.5,
+        {1280, 720},
+        {- std::numeric_limits <double> :: infinity(), std::numeric_limits <double> :: infinity()},
+        {-100., 100.},
+        5
     );
 
     vis.add(implicit_forward_flow,  "implicit\\_forward");

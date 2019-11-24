@@ -68,7 +68,8 @@ struct draw_plots
         double _legend_y = 0.5,
         std::pair <size_t, size_t> _size_picture = {1920, 1080},
         std::pair <double, double> _hard_border_x = {- std::numeric_limits <double> :: infinity(), std::numeric_limits <double> :: infinity()},
-        std::pair <double, double> _hard_border_y = {-100., 100.}
+        std::pair <double, double> _hard_border_y = {-100., 100.},
+        size_t _step = 1
     );
 
     void add
@@ -93,6 +94,7 @@ private:
     std::pair <size_t, size_t> size_picture;
     std::pair <double, double> hard_border_x;
     std::pair <double, double> hard_border_y;
+    size_t step;
 
 
     size_t color_pos;

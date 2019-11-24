@@ -24,7 +24,10 @@ struct visualization
         std::string _file_name, 
         double _legend_x = 1.49,
         double _legend_y = 1.79,
-        std::pair <size_t, size_t> _size_picture = {1280, 720}
+        std::pair <size_t, size_t> _size_picture = {1280, 720},
+        std::pair <double, double> _hard_border_x = {- std::numeric_limits <double> :: infinity(), std::numeric_limits <double> :: infinity()},
+        std::pair <double, double> _hard_border_y = {-100., 100.},
+        size_t _step = 1
     );
 
     visualization & add (method_type method, std::string method_name);

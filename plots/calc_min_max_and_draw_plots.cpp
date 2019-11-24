@@ -101,7 +101,8 @@ draw_plots::draw_plots
     double _legend_y,
     std::pair <size_t, size_t> _size_picture,
     std::pair <double, double> _hard_border_x,
-    std::pair <double, double> _hard_border_y
+    std::pair <double, double> _hard_border_y,
+    size_t _step
 ) :
     name(_name),
     file_name(_file_name),
@@ -113,6 +114,7 @@ draw_plots::draw_plots
     size_picture(_size_picture),
     hard_border_x(_hard_border_x),
     hard_border_y(_hard_border_y),
+    step(_step),
 
     color_pos(0),
     x_values(),
@@ -173,7 +175,7 @@ draw_plots::~draw_plots ()
         return;
     }
 
-    for (size_t j = 0; j != x_values[0].size(); ++j)
+    for (size_t j = 0; j < x_values[0].size(); j += step)
     {
         make_plot result
         (
