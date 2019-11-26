@@ -149,26 +149,14 @@ draw_plots::~draw_plots ()
     std::pair <double, double> range_x = get_min_max <decltype (x_values)> () (x_values);
     std::pair <double, double> range_y = get_min_max <decltype (y_values)> () (y_values);
 
-    //std::cout << range_x.first << " " << range_x.second << "\n";
-    //std::cout << range_y.first << " " << range_y.second << "\n";
-    std::cout << "\n";
 
     relax_min(range_x.first);
     relax_min(range_y.first);
     relax_max(range_x.second);
     relax_max(range_y.second);
-//TODO think about remove output
-    std::cout << range_x.first << " " << range_x.second << "\n";
-    std::cout << range_y.first << " " << range_y.second << "\n";
-    std::cout << "\n";
 
     relax_hard(range_x, hard_border_x);
     relax_hard(range_y, hard_border_y);
-
-    std::cout << range_x.first << " " << range_x.second << "\n";
-    std::cout << range_y.first << " " << range_y.second << "\n";
-    std::cout << "\n";
-    std::cout << "\n";
 
     if (x_values.empty())
     {

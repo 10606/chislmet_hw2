@@ -6,6 +6,7 @@
 #include "../methods/implicit_backward_flow.h"
 #include "../methods/explicit_backward_flow.h"
 #include "../methods/cheharda.h"
+#include "../methods/fake_method_copy.h"
 
 void generate_images
 (
@@ -52,6 +53,6 @@ void generate_images
     }
     if (bitmask[4] == '1') {
         std::cout << "make che in images_gen\n\n";
-        vis.add(cheharda(implicit_forward_flow),               "cheharda");
+        vis.add(cheharda(fake_method_copy),               "cheharda");
     }
 }
