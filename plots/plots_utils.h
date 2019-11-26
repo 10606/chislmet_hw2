@@ -108,15 +108,22 @@ private:
     std::tuple <T ...> args;
 };
 
-inline void relax_min(double & value) noexcept
+inline void relax_min (double & value) noexcept
 {
     value = std::min(value * 0.9, value * 1.1);
 }
 
-inline void relax_max(double & value) noexcept
+inline void relax_max (double & value) noexcept
 {
     value = std::max(value * 0.9, value * 1.1);
 }
+
+inline void relax_hard (std::pair <double, double> & dst, std::pair <double, double> src) noexcept
+{
+    dst.first = std::max(dst.first, src.first);
+    dst.second = std::min(dst.second, src.second);
+}
+
 
 
 #endif

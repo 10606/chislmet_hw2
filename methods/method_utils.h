@@ -25,12 +25,12 @@ inline void fill_0_column (std::vector <std::vector <double> > & dst, std::vecto
 }
 
 
-inline double calc_r (double, double cappa, double delta_x, double delta_t)
+inline double calc_r (double, double cappa, double delta_x, double delta_t) noexcept
 {
     return cappa * delta_t / (delta_x * delta_x);
 }
 
-inline double calc_s (double u, double,     double delta_x, double delta_t)
+inline double calc_s (double u, double,     double delta_x, double delta_t) noexcept
 {
     return u * delta_t / delta_x;
 }

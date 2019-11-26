@@ -51,6 +51,7 @@ void generate_images
         vis.add(explicit_backward_flow, "explicit\\_backward");
     }
     if (bitmask[4] == '1') {
-        vis.add(cheharda,               "cheharda");
+        std::cout << "make che in images_gen\n\n";
+        vis.add(cheharda(implicit_forward_flow),               "cheharda");
     }
 }
