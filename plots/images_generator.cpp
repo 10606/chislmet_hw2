@@ -15,7 +15,7 @@ void generate_images
     double kappa,
     std::pair <double, double> x_range,
     std::pair <double, double> t_range,
-    bool implicit_only
+    std::string bitmask
 )
 {
     std::function <double (double)> T_t0_values = T_step(2., 3.);
@@ -39,11 +39,19 @@ void generate_images
         1.5
     );
 
-    vis.add(implicit_forward_flow,  "implicit\\_forward");
-    vis.add(implicit_backward_flow, "implicit\\_backward");
-    if (!implicit_only) {
+    if (bitmask[0] == '1') {
+        vis.add(implicit_forward_flow,  "implicit\\_forward");
+    }
+    if (bitmask[1] == '1') {
+        vis.add(implicit_backward_flow, "implicit\\_backward");
+    }
+    if (bitmask[2] == '1') {
         vis.add(explicit_forward_flow,  "explicit\\_forward");
+    }
+    if (bitmask[3] == '1') {
         vis.add(explicit_backward_flow, "explicit\\_backward");
     }
-    vis.add(cheharda,               "cheharda");
+    if (bitmask[4] == '1') {
+        vis.add(cheharda,               "cheharda");
+    }
 }

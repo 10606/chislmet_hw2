@@ -4,7 +4,7 @@
 #include <vector>
 
 template <typename T>
-struct quard 
+struct quard
 {
     T a, b, c, d;
 };
@@ -35,4 +35,13 @@ inline double calc_s (double u, double,     double delta_x, double delta_t)
     return u * delta_t / delta_x;
 }
 
+inline double calc_u (double s, double delta_x, double delta_t)
+{
+    return s * delta_x / delta_t;
+}
+
+inline double calc_kappa (double r, double delta_x, double delta_t)
+{
+    return r * (delta_x * delta_x) / delta_t;
+}
 #endif
