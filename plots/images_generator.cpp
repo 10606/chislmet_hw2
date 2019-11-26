@@ -15,13 +15,12 @@ void generate_images
     double kappa,
     std::pair <double, double> x_range,
     std::pair <double, double> t_range,
-    std::string bitmask
+    std::string bitmask,
+    std::function <double (double)> const& T_t0_values,
+    std::function <double (double)> const& T_xa_values,
+    std::function <double (double)> const& T_xb_values
 )
 {
-    std::function <double (double)> T_t0_values = T_step(2., 3.);
-    std::function <double (double)> T_xa_values = T_sin(2., 0.000, 0.);
-    std::function <double (double)> T_xb_values = T_sin(1., 0.000, 0.);
-
     visualization vis
     (
         delta_x,

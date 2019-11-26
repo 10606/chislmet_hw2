@@ -1,5 +1,6 @@
 #pragma once
 #include <utility>
+#include <functional>
 
 void generate_images
 (
@@ -9,5 +10,8 @@ void generate_images
     double kappa,
     std::pair <double, double> x_range,
     std::pair <double, double> t_range,
-    std::string bitmask
+    std::string bitmask,
+    std::function <double (double)> const& T_t0_values,
+    std::function <double (double)> const& T_xa_values,
+    std::function <double (double)> const& T_xb_values
 );
