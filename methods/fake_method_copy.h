@@ -1,0 +1,21 @@
+#ifndef FAKE_METHOD_COPY_H
+#define FAKE_METHOD_COPY_H
+
+#include <vector>
+
+std::vector <std::vector <double> >  // T[x][t]
+fake_method_copy
+(
+    double delta_x,
+    double delta_t,
+    double u,
+    double cappa,
+    size_t x_size, 
+    size_t t_size, 
+    std::vector <double> const & T_t0_values,
+    std::vector <double> const & T_xa_values,
+    std::vector <double> const & T_xb_values
+);
+
+#endif
+

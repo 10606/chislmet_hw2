@@ -6,6 +6,7 @@
 #include "../methods/implicit_backward_flow.h"
 #include "../methods/explicit_backward_flow.h"
 #include "../methods/cheharda.h"
+#include "../methods/fake_method_copy.h"
 #include "../methods/method_utils.h"
 
 int main ()
@@ -14,8 +15,8 @@ int main ()
     double r = 0.;
     double delta_x = 0.1;
     double delta_t = 0.1;
-    double u = 0.5;//calc_u(s, r, delta_x, delta_t);
-    double cappa = 0.025;//calc_cappa(s, r, delta_x, delta_t);
+    double u = calc_u(s, r, delta_x, delta_t);
+    double cappa = calc_cappa(s, r, delta_x, delta_t);
     std::pair <double, double> x_range = {1., 25.};
     std::pair <double, double> t_range = {0., 100.};
     //std::function <double (double)> T_t0_values = T_rectangle(2., 3., 7., 11.);
@@ -48,6 +49,11 @@ int main ()
     //vis.add(implicit_backward_flow, "implicit\\_backward");
     //vis.add(explicit_forward_flow,  "explicit\\_forward");
     //vis.add(explicit_backward_flow, "explicit\\_backward");
-    //vis.add(cheharda,               "cheharda");
+    //vis.add(cheharda(fake_method_copy),         "cheharda");
+
+    vis.add(cheharda(implicit_forward_flow),    "cheharda\\_if");
+    //vis.add(cheharda(implicit_backward_flow),   "cheharda\\_ib");
+    //vis.add(cheharda(explicit_forward_flow),    "cheharda\\_ef");
+    //vis.add(cheharda(explicit_backward_flow),   "cheharda\\_eb");
 }
 

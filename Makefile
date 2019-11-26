@@ -25,6 +25,7 @@ header_method_files = 	methods/cheharda.h\
 			methods/explicit_forward_flow.h\
 			methods/implicit_backward_flow.h\
 			methods/implicit_forward_flow.h\
+			methods/fake_method_copy.h\
 			methods/method_utils.h\
 
 header_plots_files =	plots/calc_min_max_and_draw_plots.h\
@@ -41,6 +42,7 @@ method_object_files = methods/implicit_forward_flow.o\
 		      methods/explicit_backward_flow.o\
 		      methods/cheharda.o\
 		      methods/method_utils.o\
+		      methods/fake_method_copy.o\
 		      methods/common_implicit.o
 
 plots_object_files = plots/calc_min_max_and_draw_plots.o\

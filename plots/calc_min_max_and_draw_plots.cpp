@@ -175,12 +175,13 @@ draw_plots::~draw_plots ()
         return;
     }
 
-    for (size_t j = 0; j < x_values[0].size(); j += step)
+    size_t pic_index = 0;
+    for (size_t j = 0; j < x_values[0].size(); j += step, pic_index++)
     {
         make_plot result
         (
             name[j], 
-            file_name + std::to_string(j),
+            file_name + std::to_string(pic_index),
             range_x, 
             range_y,
             axis_x,

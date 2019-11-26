@@ -1,14 +1,15 @@
 #include "cheharda.h"
 
-#include "explicit_forward_flow.h"
-#include "explicit_backward_flow.h"
-#include "implicit_forward_flow.h"
-#include "implicit_backward_flow.h"
 #include "method_utils.h"
 #include <cassert>
 
+
+cheharda::cheharda (method_type _base_method) :
+    base_method(_base_method)
+{}
+
 std::vector <std::vector <double> >  // T[x][t]
-cheharda
+cheharda::operator ()
 (
     double delta_x,
     double delta_t,
@@ -31,7 +32,7 @@ cheharda
     fill_0_column(answer, T_t0_values);
 
     std::vector <std::vector <double> > start_values = 
-        implicit_forward_flow
+        base_method
         (
             delta_x,
             delta_t,
@@ -56,6 +57,12 @@ cheharda
 
         for (size_t cur_x = 1; cur_x != x_size - 1; ++cur_x)
         {
+            /*
+            answer[cur_x][cur_t] = 
+                answer[cur_x + 1][cur_t - 1] * (-s) +
+                answer[cur_x - 1][cur_t - 1] * (s) + 
+                answer[cur_x    ][cur_t - 2] * (1.);
+            */
             answer[cur_x][cur_t] = 
                 (answer[cur_x + 1][cur_t - 1] * (-s + 2.*r) +
                 answer[cur_x - 1][cur_t - 1] * (s + 2.*r) + 
