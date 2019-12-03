@@ -15,7 +15,7 @@ release_flags = -lpthread\
 		-O3 -mtune=native -march=native -g -Wall -ftemplate-depth=10000 -std=c++17
 
 compile_flags = -fsanitize=address -fsanitize=leak -fsanitize=undefined \
-		-fdiagnostics-color=always -fdiagnostics-show-template-tree -fdiagnostics-generate-patch -fdiagnostics-format=text\
+		-fdiagnostics-color=always -fdiagnostics-generate-patch \
 		-lpthread\
 		-g -Wall -ftemplate-depth=10000 -std=c++17
 
@@ -71,7 +71,7 @@ pictures: plots/plots_main.cpp.elf
 	plots/plots_main.cpp.elf
 
 plots/plots_main.cpp.elf: plots/plots_main.o ${plots_object_files} ${method_object_files}
-	g++ ${compile_flags} -o plots/plots_main.cpp.elf plots/plots_main.o ${method_object_files} ${plots_object_files} ${mgl_flag}
+	g++ ${release_flags} -o plots/plots_main.cpp.elf plots/plots_main.o ${method_object_files} ${plots_object_files} ${mgl_flag}
 
 main.cpp.elf: main.cpp ${plots_object_files} ${method_object_files}
 	g++ ${release_flags} -o main.cpp.elf main.cpp ${method_object_files} ${plots_object_files} ${mgl_flag}
@@ -80,10 +80,10 @@ methods/pc_main.cpp.elf: methods/pc_main.cpp ${plots_object_files} ${method_obje
 	g++ ${release_flags} -o pc_main.cpp.elf methods/pc_main.cpp ${method_object_files} ${plots_object_files} ${mgl_flag}
 
 methods/%.o: methods/%.cpp ${header_method_files}
-	g++ ${copile_flags} -c -o $@ $< ${mgl_flag}
+	g++ ${release_flags} -c -o $@ $< ${mgl_flag}
 
 plots/%.o: plots/%.cpp ${header_plots_files}
-	g++ ${compile_flags} -c -o $@ $< ${mgl_flag}
+	g++ ${release_flags} -c -o $@ $< ${mgl_flag}
 
 picture_name = pictures/
 video_name = pictures/video
