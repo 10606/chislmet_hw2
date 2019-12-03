@@ -26,7 +26,8 @@ struct plots_params
             std::pair <size_t, size_t> _size_picture = {1280, 720},
             std::pair <double, double> _hard_border_x =
                 {- std::numeric_limits <double> :: infinity(), std::numeric_limits <double> :: infinity()},
-            std::pair <double, double> _hard_border_y = {-10., 10.}
+            std::pair <double, double> _hard_border_y = 
+                {- std::numeric_limits <double> :: infinity(), std::numeric_limits <double> :: infinity()}
         );
     
         double legend_x;
