@@ -79,6 +79,9 @@ main.cpp.elf: main.cpp ${plots_object_files} ${method_object_files}
 methods/pc_main.cpp.elf: methods/pc_main.cpp ${plots_object_files} ${method_object_files}
 	g++ ${release_flags} -o pc_main.cpp.elf methods/pc_main.cpp ${method_object_files} ${plots_object_files} ${mgl_flag}
 
+#methods/predictor_corrector.o: methods/predictor_corrector.cpp methods/predictor_corrector.h methods/method_utils.h
+#	g++ ${release_flags} -c -o $@ $< ${mgl_flag}
+
 methods/%.o: methods/%.cpp ${header_method_files}
 	g++ ${release_flags} -c -o $@ $< ${mgl_flag}
 

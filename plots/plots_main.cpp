@@ -10,15 +10,21 @@
 
 int main ()
 {
+    Params p;
+    p.delta_t = p.U() * 1;
+    p.max_t = p.delta_t * 1000000;
+    p.delta_z = p.deltaH() * 0.1;
+    p.max_z = p.delta_z * 10;
+
     visualization vis
     (
-        Params(),
-        
+        p,
+
         {"pictures/T_z_", "t", "T", "z", plots_params::soft(1)},
         {"pictures/T_t_", "z", "T", "t", plots_params::soft(20000)},
         {"pictures/X_z_", "t", "X", "z", plots_params::soft(1)},
         {"pictures/X_t_", "z", "X", "t", plots_params::soft(20000)}
     );
 
-    vis.add(solve,  "");
+    vis.add(solve,  " ");
 }

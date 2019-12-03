@@ -19,10 +19,10 @@ struct Params {
 
 	//double delta_t = U() * 1800;
 	//double delta_z = deltaH() * 0.1;
-	double delta_t = U() * 0.1;
+	double delta_t = U() * 1;
 	double delta_z = deltaH() * 0.1;
 	double max_z = delta_z * 10;
-	double max_t = delta_t * 1000000;
+	double max_t = delta_t * 1000;
 	bool doCorrection = false;
 
 	double kappa() const {

@@ -55,9 +55,9 @@ plots_params::soft::soft
     step(_step)
 {}
 
-plots_params::plots_params 
+plots_params::plots_params
 (
-    std::string _file_name, 
+    std::string _file_name,
     std::string _axix_x_name,
     std::string _axix_y_name,
     std::string _axix_t_name,
@@ -70,10 +70,10 @@ plots_params::plots_params
     soft_params(_soft_params)
 {}
 
-visualization::visualization 
+visualization::visualization
 (
     Params const & _args,
-        
+
     plots_params T_z_params,
     plots_params T_t_params,
     plots_params X_z_params,
@@ -81,8 +81,8 @@ visualization::visualization
 ) :
     plots_T_z
     (
-        gen_names(T_z_params.axix_t_name, _args.delta_z, {0, _args.max_z}), 
-        T_z_params.file_name, 
+        gen_names(T_z_params.axix_t_name, _args.delta_z, {0, _args.max_z}),
+        T_z_params.file_name,
         T_z_params.axix_x_name,
         T_z_params.axix_y_name,
         1,
@@ -93,11 +93,11 @@ visualization::visualization
         T_z_params.soft_params.hard_border_y,
         T_z_params.soft_params.step
     ),
-    
+
     plots_T_t
     (
-        gen_names(T_t_params.axix_t_name, _args.delta_t, {0, _args.max_t}), 
-        T_t_params.file_name, 
+        gen_names(T_t_params.axix_t_name, _args.delta_t, {0, _args.max_t}),
+        T_t_params.file_name,
         T_t_params.axix_x_name,
         T_t_params.axix_y_name,
         1,
@@ -108,11 +108,11 @@ visualization::visualization
         T_t_params.soft_params.hard_border_y,
         T_t_params.soft_params.step
     ),
-    
+
     plots_X_z
     (
-        gen_names(X_z_params.axix_t_name, _args.delta_z, {0, _args.max_z}), 
-        X_z_params.file_name, 
+        gen_names(X_z_params.axix_t_name, _args.delta_z, {0, _args.max_z}),
+        X_z_params.file_name,
         X_z_params.axix_x_name,
         X_z_params.axix_y_name,
         1,
@@ -123,11 +123,11 @@ visualization::visualization
         X_z_params.soft_params.hard_border_y,
         X_z_params.soft_params.step
     ),
-    
+
     plots_X_t
     (
-        gen_names(X_t_params.axix_t_name, _args.delta_t, {0, _args.max_t}), 
-        X_t_params.file_name, 
+        gen_names(X_t_params.axix_t_name, _args.delta_t, {0, _args.max_t}),
+        X_t_params.file_name,
         X_t_params.axix_x_name,
         X_t_params.axix_y_name,
         1,
@@ -138,9 +138,9 @@ visualization::visualization
         X_t_params.soft_params.hard_border_y,
         X_t_params.soft_params.step
     ),
- 
+
     args(_args),
-    
+
     z(get_len(args.delta_z, {0, args.max_z}), std::vector <double> (get_len(args.delta_t, {0, args.max_t}))),
     t(get_len(args.delta_z, {0, args.max_z}), std::vector <double> (get_len(args.delta_t, {0, args.max_t})))
 {
@@ -161,80 +161,79 @@ visualization & visualization::add (std::function <Solution (Params const &)> me
 
     std::cout << solution.T.size() << " " << z.size() << "\n";
     std::cout << solution.X.size() << " " << z.size() << "\n";
-    
+
     std::cout << solution.T[0].size() << " " << z[0].size() << "\n";
     std::cout << solution.X[0].size() << " " << z[0].size() << "\n";
-    
-    plots_T_t.add
+
+    /*plots_T_t.add
     (
-        z, 
+        z,
         solution.T,
         method_name
     );
-    
+
     plots_T_z.add
     (
-        transponse(t), 
+        transponse(t),
         transponse(solution.T),
         method_name
-    );
-    
+    );*/
+
     plots_X_t.add
     (
-        z, 
+        z,
         solution.X,
         method_name
     );
-    
-    plots_X_z.add
+
+    /*plots_X_z.add
     (
-        transponse(t), 
+        transponse(t),
         transponse(solution.X),
         method_name
-    );
-    
+    );*/
+
     return * this;
 }
 
 
-visualization & visualization::add 
+visualization & visualization::add
 (
-    std::function <Solution (Params const &)> method, 
+    std::function <Solution (Params const &)> method,
     std::string method_name,
-        
+
     Params const & _args
 )
 {
     Solution solution = method(_args);
-    
-    plots_T_z.add
+
+    /*plots_T_z.add
     (
-        z, 
+        z,
         solution.T,
         method_name
     );
-    
+
     plots_T_t.add
     (
-        t, 
+        t,
         transponse(solution.T),
         method_name
     );
-    
+
     plots_X_z.add
     (
-        z, 
+        z,
         solution.X,
         method_name
-    );
-    
+    );*/
+
     plots_X_t.add
     (
-        t, 
+        t,
         transponse(solution.X),
         method_name
     );
-    
+
     return * this;
 }
-

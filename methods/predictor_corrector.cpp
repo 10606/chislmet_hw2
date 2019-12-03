@@ -15,6 +15,9 @@ void print(std::vector<std::vector<double>> const& X) {
 Solution solve(Params const& params) {
 	size_t L = static_cast<size_t>(params.max_z / params.delta_z) + 1;
 	size_t N = static_cast<size_t>(params.max_t / params.delta_t) + 1;
+	std::cout << "delta_t delta_z == " << params.delta_t << ' ' << params.delta_z << std::endl;
+	std::cout << "max_t max_z == " << params.max_t << ' ' << params.max_z << std::endl;
+	std::cout << "L N == " << L << ' ' << N << std::endl;
 	std::vector<std::vector<double>> X(L, std::vector<double>(N));
 	std::vector<std::vector<double>> T(L, std::vector<double>(N));
 
