@@ -1,9 +1,21 @@
 #include "visualization.h"
 
 #include "calc_min_max_and_draw_plots.h"
+#include "../methods/predictor_corrector.h"
 #include "../methods/method_utils.h"
 #include <sstream>
 #include <iomanip>
+
+size_t visualization::get_len (double delta, std::pair <double, double> range)
+{
+    return (delta + range.second - range.first) / delta;
+}
+
+double visualization::get_pos (size_t index, double delta, std::pair <double, double> range)
+{
+    return range.first + static_cast <double> (index) * delta;
+}
+
 
 std::string visualization::format (double value, size_t precision = 5, size_t width = 10)
 {
@@ -14,140 +26,170 @@ std::string visualization::format (double value, size_t precision = 5, size_t wi
     return ss.str();
 }
 
-std::vector <std::string> visualization::gen_names (double delta_t, std::pair <double, double> t_range)
+std::vector <std::string> visualization::gen_names (std::string name, double delta_t, std::pair <double, double> t_range)
 {
-    size_t t_size = (delta_t + t_range.second - t_range.first) / delta_t;
+    size_t t_size = get_len(delta_t, t_range);
     std::vector <std::string> t_names;
     for (size_t cur_t = 0; cur_t != t_size; ++cur_t)
     {
-        double t_value = t_range.first + static_cast <double> (cur_t) * delta_t;
-        t_names.push_back("t = " + format(t_value));
+        double t_value = get_pos(cur_t, delta_t, t_range);
+        t_names.push_back(name + format(t_value));
     }
     return t_names;
 }
 
-visualization::visualization 
+plots_params::soft::soft
 (
-    double _delta_x,
-    double _delta_t,
-    double _u,
-    double _cappa,
-    std::pair <double, double> _x_range, 
-    std::pair <double, double> _t_range, 
-    std::function <double (double)> const & _T_t0_values,
-    std::function <double (double)> const & _T_xa_values,
-    std::function <double (double)> const & _T_xb_values,
-        
-    std::string _file_name, 
+    size_t _step,
     double _legend_x,
     double _legend_y,
     std::pair <size_t, size_t> _size_picture,
     std::pair <double, double> _hard_border_x,
-    std::pair <double, double> _hard_border_y,
-    size_t _step
+    std::pair <double, double> _hard_border_y
 ) :
-    delta_x(_delta_x),
-    delta_t(_delta_t),
-    u(_u),
-    cappa(_cappa),
-    x_range(_x_range),
-    t_range(_t_range),
-    T_t0_values(),
-    T_xa_values(),
-    T_xb_values(),
-    
-    plots
-    (
-        gen_names(delta_t, t_range), 
-        _file_name, 
-        "x",
-        "T",
-        1,
-        _legend_x,
-        _legend_y,
-        _size_picture,
-        _hard_border_x,
-        _hard_border_y,
-        _step
-    ),
-    x()
-{
-    visualization::calc_xab_t0_x
-    (
-        T_t0_values,
-        T_xa_values,
-        T_xb_values,
-        x, //[x][t]
-        delta_x,
-        delta_t,
-        x_range,
-        t_range,
-        _T_t0_values,
-        _T_xa_values,
-        _T_xb_values
-    );
-}
+    legend_x(_legend_x),
+    legend_y(_legend_y),
+    size_picture(_size_picture),
+    hard_border_x(_hard_border_x),
+    hard_border_y(_hard_border_y),
+    step(_step)
+{}
 
-void visualization::calc_xab_t0_x
+plots_params::plots_params 
 (
-    std::vector <double> & _T_t0_values,
-    std::vector <double> & _T_xa_values,
-    std::vector <double> & _T_xb_values,
-    std::vector <std::vector <double> > & _x, //[x][t]
-    double _delta_x,
-    double _delta_t,
-    std::pair <double, double> _x_range,
-    std::pair <double, double> _t_range,
-    std::function <double (double)> const & f_T_t0_values,
-    std::function <double (double)> const & f_T_xa_values,
-    std::function <double (double)> const & f_T_xb_values
-)
+    std::string _file_name, 
+    std::string _axix_x_name,
+    std::string _axix_y_name,
+    std::string _axix_t_name,
+    soft _soft_params
+) :
+    file_name(_file_name),
+    axix_x_name(_axix_x_name),
+    axix_y_name(_axix_y_name),
+    axix_t_name(_axix_t_name),
+    soft_params(_soft_params)
+{}
+
+visualization::visualization 
+(
+    Params const & _args,
+        
+    plots_params T_z_params,
+    plots_params T_t_params,
+    plots_params X_z_params,
+    plots_params X_t_params
+) :
+    plots_T_z
+    (
+        gen_names(T_z_params.axix_t_name, _args.delta_z, {0, _args.max_z}), 
+        T_z_params.file_name, 
+        T_z_params.axix_x_name,
+        T_z_params.axix_y_name,
+        1,
+        T_z_params.soft_params.legend_x,
+        T_z_params.soft_params.legend_y,
+        T_z_params.soft_params.size_picture,
+        T_z_params.soft_params.hard_border_x,
+        T_z_params.soft_params.hard_border_y,
+        T_z_params.soft_params.step
+    ),
+    
+    plots_T_t
+    (
+        gen_names(T_t_params.axix_t_name, _args.delta_t, {0, _args.max_t}), 
+        T_t_params.file_name, 
+        T_t_params.axix_x_name,
+        T_t_params.axix_y_name,
+        1,
+        T_t_params.soft_params.legend_x,
+        T_t_params.soft_params.legend_y,
+        T_t_params.soft_params.size_picture,
+        T_t_params.soft_params.hard_border_x,
+        T_t_params.soft_params.hard_border_y,
+        T_t_params.soft_params.step
+    ),
+    
+    plots_X_z
+    (
+        gen_names(X_z_params.axix_t_name, _args.delta_z, {0, _args.max_z}), 
+        X_z_params.file_name, 
+        X_z_params.axix_x_name,
+        X_z_params.axix_y_name,
+        1,
+        X_z_params.soft_params.legend_x,
+        X_z_params.soft_params.legend_y,
+        X_z_params.soft_params.size_picture,
+        X_z_params.soft_params.hard_border_x,
+        X_z_params.soft_params.hard_border_y,
+        X_z_params.soft_params.step
+    ),
+    
+    plots_X_t
+    (
+        gen_names(X_t_params.axix_t_name, _args.delta_t, {0, _args.max_t}), 
+        X_t_params.file_name, 
+        X_t_params.axix_x_name,
+        X_t_params.axix_y_name,
+        1,
+        X_t_params.soft_params.legend_x,
+        X_t_params.soft_params.legend_y,
+        X_t_params.soft_params.size_picture,
+        X_t_params.soft_params.hard_border_x,
+        X_t_params.soft_params.hard_border_y,
+        X_t_params.soft_params.step
+    ),
+ 
+    args(_args),
+    
+    z(get_len(args.delta_z, {0, args.max_z}), std::vector <double> (get_len(args.delta_t, {0, args.max_t}))),
+    t(get_len(args.delta_z, {0, args.max_z}), std::vector <double> (get_len(args.delta_t, {0, args.max_t})))
 {
-    size_t x_size = get_size(_x_range, _delta_x);
-    size_t t_size = get_size(_t_range, _delta_t);
-
-    _x.resize(x_size, std::vector <double> (t_size));
-
-    for (size_t cur_t = 0; cur_t != t_size; ++cur_t)
+    for (size_t i = 0; i != z.size(); ++i)
     {
-        double t_value = _t_range.first + static_cast <double> (cur_t) * _delta_t;
-        _T_xa_values.push_back(f_T_xa_values(t_value));
-        _T_xb_values.push_back(f_T_xb_values(t_value));
-    }
-
-    for (size_t cur_x = 0; cur_x != x_size; ++cur_x)
-    {
-        double x_value = _x_range.first + static_cast <double> (cur_x) * _delta_x;
-        _T_t0_values.push_back(f_T_t0_values(x_value));
-    }
-
-    for (size_t cur_t = 0; cur_t != t_size; ++cur_t)
-    {
-        for (size_t cur_x = 0; cur_x != x_size; ++cur_x)
+        for (size_t j = 0; j != z[i].size(); ++j)
         {
-            double x_value = _x_range.first + static_cast <double> (cur_x) * _delta_x;
-            _x[cur_x][cur_t] = x_value;
+            z[i][j] = get_pos(i, args.delta_z, {0, args.max_z});
+            t[i][j] = get_pos(j, args.delta_t, {0, args.max_t});
         }
     }
 }
 
-visualization & visualization::add (method_type method, std::string method_name)
+visualization & visualization::add (std::function <Solution (Params const &)> method, std::string method_name)
 {
-    plots.add
+
+    Solution solution = method(args);
+
+    std::cout << solution.T.size() << " " << z.size() << "\n";
+    std::cout << solution.X.size() << " " << z.size() << "\n";
+    
+    std::cout << solution.T[0].size() << " " << z[0].size() << "\n";
+    std::cout << solution.X[0].size() << " " << z[0].size() << "\n";
+    
+    plots_T_t.add
     (
-        x, 
-        method
-        (
-            delta_x,
-            delta_t,
-            u,
-            cappa,
-            get_size(x_range, delta_x),
-            get_size(t_range, delta_t),
-            T_t0_values,
-            T_xa_values,
-            T_xb_values
-        ), 
+        z, 
+        solution.T,
+        method_name
+    );
+    
+    plots_T_z.add
+    (
+        transponse(t), 
+        transponse(solution.T),
+        method_name
+    );
+    
+    plots_X_t.add
+    (
+        z, 
+        solution.X,
+        method_name
+    );
+    
+    plots_X_z.add
+    (
+        transponse(t), 
+        transponse(solution.X),
         method_name
     );
     
@@ -157,52 +199,39 @@ visualization & visualization::add (method_type method, std::string method_name)
 
 visualization & visualization::add 
 (
-    method_type method, 
+    std::function <Solution (Params const &)> method, 
     std::string method_name,
-    
-    double _u,
-    double _cappa,
-    std::function <double (double)> const & f_T_t0_values,
-    std::function <double (double)> const & f_T_xa_values,
-    std::function <double (double)> const & f_T_xb_values
+        
+    Params const & _args
 )
 {
-    std::vector <double> _T_t0_values;
-    std::vector <double> _T_xa_values;
-    std::vector <double> _T_xb_values;
-
-    std::vector <std::vector <double> > _x; //[x][t]
-
-    visualization::calc_xab_t0_x
+    Solution solution = method(_args);
+    
+    plots_T_z.add
     (
-        _T_t0_values,
-        _T_xa_values,
-        _T_xb_values,
-        _x, //[x][t]
-        delta_x,
-        delta_t,
-        x_range,
-        t_range,
-        f_T_t0_values,
-        f_T_xa_values,
-        f_T_xb_values
+        z, 
+        solution.T,
+        method_name
     );
-
-    plots.add
+    
+    plots_T_t.add
     (
-        _x, 
-        method
-        (
-            delta_x,
-            delta_t,
-            _u,
-            _cappa,
-            get_size(x_range, delta_x),
-            get_size(t_range, delta_t),
-            _T_t0_values,
-            _T_xa_values,
-            _T_xb_values
-        ), 
+        t, 
+        transponse(solution.T),
+        method_name
+    );
+    
+    plots_X_z.add
+    (
+        z, 
+        solution.X,
+        method_name
+    );
+    
+    plots_X_t.add
+    (
+        t, 
+        transponse(solution.X),
         method_name
     );
     

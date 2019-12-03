@@ -166,10 +166,14 @@ draw_plots::~draw_plots ()
     size_t pic_index = 0;
     for (size_t j = 0; j < x_values[0].size(); j += step, pic_index++)
     {
+        std::string cur_file_name = file_name + std::to_string(pic_index);
+        
+        std::cout << cur_file_name <<  " " << name[j] << "\n";
+
         make_plot result
         (
             name[j], 
-            file_name + std::to_string(pic_index),
+            cur_file_name,
             range_x,
             range_y,
             axis_x,
