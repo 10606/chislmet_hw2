@@ -141,8 +141,8 @@ visualization::visualization
 
     args(_args),
 
-    z(get_len(args.delta_z, {0, args.max_z}), std::vector <double> (get_len(args.delta_t, {0, args.max_t}))),
-    t(get_len(args.delta_z, {0, args.max_z}), std::vector <double> (get_len(args.delta_t, {0, args.max_t})))
+    z(args.L(), std::vector <double> (args.N())),
+    t(args.L(), std::vector <double> (args.N()))
 {
     for (size_t i = 0; i != z.size(); ++i)
     {

@@ -41,6 +41,14 @@ struct Params {
 	double deltaH() const {
 		return kappa() / U();
 	}
+
+  size_t L() const {
+    return static_cast<size_t>(max_z / delta_z) + 1;
+  }
+
+  size_t N() const {
+    return static_cast<size_t>(max_t / delta_t) + 1;
+  }
 };
 
 struct Solution {
