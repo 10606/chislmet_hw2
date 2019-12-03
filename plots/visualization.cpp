@@ -216,7 +216,7 @@ visualization & visualization::add
 
     plots_T_t.add
     (
-        t,
+        transponse(t),
         transponse(solution.T),
         method_name
     );
@@ -230,7 +230,7 @@ visualization & visualization::add
 
     plots_X_t.add
     (
-        t,
+        transponse(t),
         transponse(solution.X),
         method_name
     );
