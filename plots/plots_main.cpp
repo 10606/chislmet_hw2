@@ -11,10 +11,10 @@
 int main ()
 {
     Params p;
-    p.delta_t = p.U() * 1;
-    p.max_t = p.delta_t * 1000000;
+    p.delta_t = p.U() * 100;
+    p.max_t = p.delta_t * 100000;
     p.delta_z = p.deltaH() * 0.1;
-    p.max_z = p.delta_z * 10;
+    p.max_z = p.delta_z * 100;
 
     visualization vis
     (
