@@ -4,20 +4,33 @@
 #include <vector>
 
 void print(std::vector<std::vector<double>> const& X) {
-	for (size_t n = 0; n < X[0].size(); n++) {
-		for (size_t k = 0; k < X.size(); k++) {
+	int n_step = 100;
+	int k_step = 10;
+	for (size_t n = 0; n < X[0].size(); n += n_step) {
+		for (size_t k = 0; k < X.size(); k += k_step) {
 			std::cout << X[k][n] << ' ';
 		}
 		std::cout << std::endl;
 	}
 }
 
+void print(std::vector<double> const& v, size_t step) {
+	for (size_t i = 0; i < v.size(); i += step) {
+		std::cout << v[i] << ' ';
+	}
+	std::cout << std::endl;
+}
+
+double clamp(double x) {
+	return std::max(0., std::min(1., x));
+}
+
 Solution solve(Params const& params) {
 	size_t L = params.L();
 	size_t N = params.N();
-	std::cout << "delta_t delta_z == " << params.delta_t << ' ' << params.delta_z << std::endl;
-	std::cout << "max_t max_z == " << params.max_t << ' ' << params.max_z << std::endl;
-	std::cout << "L N == " << L << ' ' << N << std::endl;
+	//std::cout << "delta_t delta_z == " << params.delta_t << ' ' << params.delta_z << std::endl;
+	//std::cout << "max_t max_z == " << params.max_t << ' ' << params.max_z << std::endl;
+	//std::cout << "L N == " << L << ' ' << N << std::endl;
 	std::vector<std::vector<double>> X(L, std::vector<double>(N));
 	std::vector<std::vector<double>> T(L, std::vector<double>(N));
 
@@ -53,41 +66,48 @@ Solution solve(Params const& params) {
 	if (!params.doCorrection) {
 		return { X, T };
 	}
+	//print(X);
+	//std::cout << std::endl;
+
+	auto X0 = X;
+	auto T0 = T;
 
 	std::vector<quard<double>> system;
 	double a = -params.D * params.delta_t / (params.delta_z * params.delta_z);
 	double b = 1 - 2 * a;
 	for (size_t n = 0; n < N - 1; n++) {
-		double c = X[1][n] + params.delta_t * params.W(X[1][n + 1], T[1][n + 1]);
+		double c = X[1][n] + params.delta_t * params.W(X0[1][n + 1], T0[1][n + 1]);
 		system.push_back({ 0, b, a, c });
 		for (size_t k = 2; k < L - 1; k++) {
-			c = X[k][n] + params.delta_t * params.W(X[k][n + 1], T[k][n + 1]);
+			c = X[k][n] + params.delta_t * params.W(X0[k][n + 1], T0[k][n + 1]);
 			system.push_back({ a, b, a, c });
 		}
-		c = X[L - 1][n] + params.delta_t * params.W(X[L - 1][n + 1], T[L - 1][n + 1]);
-		system.push_back({ 1 - a, a, 0, c });
+		c = X[L - 1][n] + params.delta_t * params.W(X0[L - 1][n + 1], T0[L - 1][n + 1]);
+		system.push_back({ a, 1 - a, 0, c });
+
 		std::vector<double> Xs = solve_3_diag(system);
 		for (size_t k = 1; k < L; k++) {
 			X[k][n + 1] = Xs[k - 1];
 		}
+		system.clear();
 	}
 
-	system.clear();
 	a = -params.kappa() * params.delta_t / (params.delta_z * params.delta_z);
 	b = 1 - 2 * a;
 	for (size_t n = 0; n < N - 1; n++) {
-		double c = T[1][n] - a * params.Tm - params.delta_t * params.Q / params.C * params.W(X[1][n + 1], T[1][n + 1]);
+		double c = T[1][n] - a * params.Tm - params.delta_t * params.Q / params.C * params.W(X0[1][n + 1], T0[1][n + 1]);
 		system.push_back({ 0, b, a, c });
-		for (size_t k = 1; k < L - 1; k++) {
-			c = T[k][n] - params.delta_t * params.Q / params.C * params.W(X[k][n + 1], T[k][n + 1]);
+		for (size_t k = 2; k < L - 1; k++) {
+			c = T[k][n] - params.delta_t * params.Q / params.C * params.W(X0[k][n + 1], T0[k][n + 1]);
 			system.push_back({ a, b, a, c });
 		}
-		c = T[L - 1][n] - params.delta_t * params.Q / params.C * params.W(X[L - 1][n + 1], T[L - 1][n + 1]);
-		system.push_back({ 1 - a, a, 0, c });
+		c = T[L - 1][n] - params.delta_t * params.Q / params.C * params.W(X0[L - 1][n + 1], T0[L - 1][n + 1]);
+		system.push_back({ a, 1 - a, 0, c });
 		std::vector<double> Ts = solve_3_diag(system);
 		for (size_t k = 1; k < L; k++) {
 			T[k][n + 1] = Ts[k - 1];
 		}
+		system.clear();
 	}
 
 	return { X, T };

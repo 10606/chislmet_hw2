@@ -50,6 +50,11 @@ plots_object_files = plots/calc_min_max_and_draw_plots.o\
 		     plots/plots.o\
 		     plots/visualization.o
 
+pictures: plots/plots_main.cpp.elf
+	 	-mkdir pictures
+	 	-rm pictures/*
+	 	plots/plots_main.cpp.elf
+
 pc_main: methods/pc_main.cpp.elf
 		./pc_main.cpp.elf
 
@@ -64,11 +69,6 @@ clean:
 	rm -rf methods/*.elf
 	rm -rf ./*.o
 	rm -rf ./*.elf
-
-pictures: plots/plots_main.cpp.elf
-	-mkdir pictures
-	-rm pictures/*
-	plots/plots_main.cpp.elf
 
 plots/plots_main.cpp.elf: plots/plots_main.o ${plots_object_files} ${method_object_files}
 	g++ ${release_flags} -o plots/plots_main.cpp.elf plots/plots_main.o ${method_object_files} ${plots_object_files} ${mgl_flag}

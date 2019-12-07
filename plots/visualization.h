@@ -23,7 +23,7 @@ struct plots_params
             size_t _step = 1,
             double _legend_x = 1.49,
             double _legend_y = 1.79,
-            std::pair <size_t, size_t> _size_picture = {320, 180},
+            std::pair <size_t, size_t> _size_picture = {640, 360},
             std::pair <double, double> _hard_border_x =
                 {- std::numeric_limits <double> :: infinity(), std::numeric_limits <double> :: infinity()},
             std::pair <double, double> _hard_border_y =

@@ -8,22 +8,28 @@
 #include "../methods/method_utils.h"
 #include "../methods/predictor_corrector.h"
 
+size_t MAX_FRAMES = 50; // approximately
+
 int main ()
 {
     Params p;
-    p.delta_t = p.U() * 100;
-    p.max_t = p.delta_t * 100000;
+    p.delta_t = p.U() * 10000;
+    p.max_t = p.delta_t * 10000;
     p.delta_z = p.deltaH() * 0.1;
     p.max_z = p.delta_z * 100;
+    p.doCorrection = true;
+
+    size_t z_skip = std::max(size_t(1), p.L() / MAX_FRAMES);
+    size_t t_skip = std::max(size_t(1), p.N() / MAX_FRAMES);
 
     visualization vis
     (
         p,
 
-        {"pictures/T_z_", "t", "T", "z", plots_params::soft(1)},
-        {"pictures/T_t_", "z", "T", "t", plots_params::soft(20000)},
-        {"pictures/X_z_", "t", "X", "z", plots_params::soft(1)},
-        {"pictures/X_t_", "z", "X", "t", plots_params::soft(20000)}
+        {"pictures/T_z_", "t", "T", "z", plots_params::soft(z_skip)},
+        {"pictures/T_t_", "z", "T", "t", plots_params::soft(t_skip)},
+        {"pictures/X_z_", "t", "X", "z", plots_params::soft(z_skip)},
+        {"pictures/X_t_", "z", "X", "t", plots_params::soft(t_skip)}
     );
 
     vis.add(solve,  " ");
