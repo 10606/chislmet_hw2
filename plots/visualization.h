@@ -78,7 +78,7 @@ private:
 
     static std::string format (double value, size_t precision, size_t width);
 
-    static std::vector <std::string> gen_names (std::string name, double delta_t, std::pair <double, double> t_range);
+    static std::vector <std::string> gen_names (std::string name, double delta_t, std::pair <double, double> t_range, size_t t_size);
 
     draw_plots plots_T_z;
     draw_plots plots_T_t;

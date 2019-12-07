@@ -26,9 +26,9 @@ std::string visualization::format (double value, size_t precision = 5, size_t wi
     return ss.str();
 }
 
-std::vector <std::string> visualization::gen_names (std::string name, double delta_t, std::pair <double, double> t_range)
+std::vector <std::string> visualization::gen_names (std::string name, double delta_t, std::pair <double, double> t_range, size_t t_size)
 {
-    size_t t_size = get_len(delta_t, t_range);
+    //size_t t_size = get_len(delta_t, t_range);
     std::vector <std::string> t_names;
     for (size_t cur_t = 0; cur_t != t_size; ++cur_t)
     {
@@ -81,7 +81,7 @@ visualization::visualization
 ) :
     plots_T_z
     (
-        gen_names(T_z_params.axix_t_name, _args.delta_z, {0, _args.max_z}),
+        gen_names(T_z_params.axix_t_name, _args.delta_z, {0, _args.max_z}, _args.N()),
         T_z_params.file_name,
         T_z_params.axix_x_name,
         T_z_params.axix_y_name,
@@ -96,7 +96,7 @@ visualization::visualization
 
     plots_T_t
     (
-        gen_names(T_t_params.axix_t_name, _args.delta_t, {0, _args.max_t}),
+        gen_names(T_t_params.axix_t_name, _args.delta_t, {0, _args.max_t}, _args.N()),
         T_t_params.file_name,
         T_t_params.axix_x_name,
         T_t_params.axix_y_name,
@@ -111,7 +111,7 @@ visualization::visualization
 
     plots_X_z
     (
-        gen_names(X_z_params.axix_t_name, _args.delta_z, {0, _args.max_z}),
+        gen_names(X_z_params.axix_t_name, _args.delta_z, {0, _args.max_z}, _args.N()),
         X_z_params.file_name,
         X_z_params.axix_x_name,
         X_z_params.axix_y_name,
@@ -126,7 +126,7 @@ visualization::visualization
 
     plots_X_t
     (
-        gen_names(X_t_params.axix_t_name, _args.delta_t, {0, _args.max_t}),
+        gen_names(X_t_params.axix_t_name, _args.delta_t, {0, _args.max_t}, _args.N()),
         X_t_params.file_name,
         X_t_params.axix_x_name,
         X_t_params.axix_y_name,
