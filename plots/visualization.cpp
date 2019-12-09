@@ -159,13 +159,13 @@ visualization & visualization::add (std::function <Solution (Params const &)> me
 
     Solution solution = method(args);
 
-    std::cout << solution.T.size() << " " << z.size() << "\n";
-    std::cout << solution.X.size() << " " << z.size() << "\n";
+    //std::cout << solution.T.size() << " " << z.size() << "\n";
+    //std::cout << solution.X.size() << " " << z.size() << "\n";
 
-    std::cout << solution.T[0].size() << " " << z[0].size() << "\n";
-    std::cout << solution.X[0].size() << " " << z[0].size() << "\n";
+    //std::cout << solution.T[0].size() << " " << z[0].size() << "\n";
+    //std::cout << solution.X[0].size() << " " << z[0].size() << "\n";
 
-    plots_T_t.add
+    /*plots_T_t.add
     (
         z,
         solution.T,
@@ -177,7 +177,7 @@ visualization & visualization::add (std::function <Solution (Params const &)> me
         transponse(t),
         transponse(solution.T),
         method_name
-    );
+    );*/
 
     plots_X_t.add
     (
@@ -186,17 +186,17 @@ visualization & visualization::add (std::function <Solution (Params const &)> me
         method_name
     );
 
-    plots_X_z.add
+    /*plots_X_z.add
     (
         transponse(t),
         transponse(solution.X),
         method_name
-    );
+    );*/
 
     return * this;
 }
 
-
+/*
 visualization & visualization::add
 (
     std::function <Solution (Params const &)> method,
@@ -205,7 +205,7 @@ visualization & visualization::add
     Params const & _args
 )
 {
-    Solution solution = method(_args);
+    /Solution solution = method(_args);
 
     plots_T_z.add
     (
@@ -237,3 +237,4 @@ visualization & visualization::add
 
     return * this;
 }
+*/

@@ -99,16 +99,17 @@ pix_fmts = rgba
 encoder = libx264
 
 video_T_z:
-	ffmpeg -r ${frame_rate} -i ${picture_name}T_z_%d.png -codec:v ${encoder} -filter:v "fps=${fps}, format=${pix_fmts}, scale=${resolution}" ${video_name}_T_z.mp4
+	-ffmpeg -r ${frame_rate} -i ${picture_name}T_z_%d.png -codec:v ${encoder} -filter:v "fps=${fps}, format=${pix_fmts}, scale=${resolution}" ${video_name}_T_z.mp4
 
 video_T_t:
-	ffmpeg -r ${frame_rate} -i ${picture_name}T_t_%d.png -codec:v ${encoder} -filter:v "fps=${fps}, format=${pix_fmts}, scale=${resolution}" ${video_name}_T_t.mp4
+	-ffmpeg -r ${frame_rate} -i ${picture_name}T_t_%d.png -codec:v ${encoder} -filter:v "fps=${fps}, format=${pix_fmts}, scale=${resolution}" ${video_name}_T_t.mp4
 
 video_X_z:
-	ffmpeg -r ${frame_rate} -i ${picture_name}X_z_%d.png -codec:v ${encoder} -filter:v "fps=${fps}, format=${pix_fmts}, scale=${resolution}" ${video_name}_X_z.mp4
+	-ffmpeg -r ${frame_rate} -i ${picture_name}X_z_%d.png -codec:v ${encoder} -filter:v "fps=${fps}, format=${pix_fmts}, scale=${resolution}" ${video_name}_X_z.mp4
 
 video_X_t:
-	ffmpeg -r ${frame_rate} -i ${picture_name}X_t_%d.png -codec:v ${encoder} -filter:v "fps=${fps}, format=${pix_fmts}, scale=${resolution}" ${video_name}_X_t.mp4
+	-ffmpeg -r ${frame_rate} -i ${picture_name}X_t_%d.png -codec:v ${encoder} -filter:v "fps=${fps}, format=${pix_fmts}, scale=${resolution}" ${video_name}_X_t.mp4
 
 
 video: video_T_z video_T_t video_X_t video_X_z
+#video: video_X_t

@@ -62,13 +62,13 @@ struct visualization
 
     visualization & add (std::function <Solution (Params const &)> method, std::string method_name);
 
-    visualization & add
+    /*visualization & add
     (
         std::function <Solution (Params const &)> method,
         std::string method_name,
 
         Params const & _args
-    );
+    );*/
 
 private:
 

@@ -14,11 +14,17 @@ int main ()
 {
     Params p;
     p.delta_t = p.U() * 10000;
-    p.max_t = p.delta_t * 10000;
-    p.delta_z = p.deltaH() * 0.1;
+    p.max_t = p.delta_t * 10000 * 2;
+    p.delta_z = p.deltaH() * 1;
+    //std::cout << "delta_z == " << p.delta_z << std::endl;
+    ///return 0;
     p.max_z = p.delta_z * 100;
     p.doCorrection = true;
-
+    //p.D = 8e-12;
+    //p.D  /= 3;
+    p.K *= 50;
+    p.alpha = 3;
+    
     size_t z_skip = std::max(size_t(1), p.L() / MAX_FRAMES);
     size_t t_skip = std::max(size_t(1), p.N() / MAX_FRAMES);
 

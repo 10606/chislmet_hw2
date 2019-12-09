@@ -50,8 +50,16 @@ void draw_plot::add
         legend_names.push_back({plot_color, legend_f_name});
     }
 
-    x_values.push_back(x);
-    y_values.push_back(y);
+    size_t step = std::max(1ul, x.size() / size_picture.first);
+    std::cout << "step == " << step << std::endl;
+    std::vector<double> new_x, new_y;
+    for (size_t i = 0; i < x.size(); i += step) {
+      new_x.push_back(x[i]);
+      new_y.push_back(y[i]);
+    }
+
+    x_values.push_back(new_x);
+    y_values.push_back(new_y);
 }
 
 draw_plot::~draw_plot ()
@@ -139,6 +147,15 @@ void draw_plots::add
     {
         legend_names.push_back({plot_color, legend_f_name});
     }
+
+    /*size_t step = std::max(1ul, x.size() / size_picture.first);
+    std::cout << "step == " << step << std::endl;
+    std::cout << "x.size() == " << x.size() << std::endl;
+    std::vector<std::vector<double>> new_x, new_y;
+    for (size_t i = 0; i < x.size(); i += step) {
+      new_x.push_back(x[i]);
+      new_y.push_back(y[i]);
+    }*/
 
     x_values.push_back(transponse(x));
     y_values.push_back(transponse(y));

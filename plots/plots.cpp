@@ -2,9 +2,9 @@
 
 make_plot::make_plot
 (
-    std::string _name, 
-    std::string _file_name, 
-    std::pair <double, double> range_x, 
+    std::string _name,
+    std::string _file_name,
+    std::pair <double, double> range_x,
     std::pair <double, double> range_y,
     std::string _axis_x,
     std::string _axis_y,
@@ -29,12 +29,15 @@ make_plot::make_plot
 
     gr.SetRange('x', range_x.first, range_x.second);
     gr.SetRange('y', range_y.first, range_y.second);
-    
+
+    //gr.SetQuality(MGL_DRAW_FAST);
+    //std::cout << "quality == " << gr.GetQuality() << std::endl;
+
     gr.Adjust();
     gr.Axis("xy6f");
 
 }
-     
+
 void make_plot::add
 (
     std::vector <double> const & x,
@@ -49,8 +52,8 @@ void make_plot::add
     }
     plot_from_dots(x, y, plot_color);
 }
-    
-     
+
+
 make_plot::~make_plot ()
 {
     gr.SetFunc("", "");
@@ -64,7 +67,7 @@ make_plot::~make_plot ()
         }
         gr.Legend(legend_x, legend_y);
     }
-  
+
     gr.Label('x', axis_x.c_str());
     gr.Label('y', axis_y.c_str());
 

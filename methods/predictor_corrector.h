@@ -4,17 +4,21 @@
 #include <vector>
 #include <cmath>
 
+inline double clamp(double x, double l = 0, double r = 1) {
+	return std::max(l, std::min(r, x));
+}
+
 struct Params {
-	double K = 1.6e6;
-	double E = 8e4;
+	double K = 1.6e6; // <----
+	double E = 8e4; // <----
 	double alpha = 2; // 0.5 - 3
 	double Q = 7e5;
 	double T0 = 293;
 	double rho = 830;
 	double C = 1990;
 	double lambda = 0.13;
-	double D = 7.87067869467e-8;
-	double R = 8.31446261815324;
+	double D = 7.87067869467e-8;  // <---
+	double const R = 8.31446261815324;
 	double Tm = T0 + Q / C;
 
 	//double delta_t = U() * 1800;
@@ -30,6 +34,10 @@ struct Params {
 	}
 
 	double W(double X, double T) const {
+		/*if (T < 0.01) {
+			T = 0.01;
+		}
+		X = clamp(X);*/
 		return -K * pow(X, alpha) * exp(-E / (R * T));
 	}
 

@@ -2,6 +2,7 @@
 #include "method_utils.h"
 #include <iostream>
 #include <vector>
+#include <cassert>
 
 void print(std::vector<std::vector<double>> const& X) {
 	int n_step = 100;
@@ -19,10 +20,6 @@ void print(std::vector<double> const& v, size_t step) {
 		std::cout << v[i] << ' ';
 	}
 	std::cout << std::endl;
-}
-
-double clamp(double x) {
-	return std::max(0., std::min(1., x));
 }
 
 Solution solve(Params const& params) {
@@ -55,9 +52,16 @@ Solution solve(Params const& params) {
 			T[k][n + 1] = T[k][n] + params.delta_t * (
 				params.kappa() * (T[k + 1][n] - 2 * T[k][n] + T[k - 1][n]) / dz2 -
 				params.Q / params.C * params.W(X[k][n], T[k][n]));
+			//X[k][n + 1] = clamp(X[k][n + 1]);
+			/*if (X[k][n + 1] < 0 || X[k][n + 1] > 1) {
+				std::cerr << "X[k][n + 1] == " << X[k][n + 1] << std::endl;
+			}*/
 		}
-		X[L - 1][n + 1] = X[L - 2][n + 1];
-		T[L - 1][n + 1] = T[L - 2][n + 1];
+		X[L - 1][n + 1] = X[L - 2][n + 1] + (X[L - 1][n] - X[L - 3][n]) * 0.5;
+		X[L - 1][n + 1] = T[L - 2][n + 1] + (T[L - 1][n] - T[L - 3][n]) * 0.5;
+		//X[L - 1][n + 1] = X[L - 2][n + 1];
+		//T[L - 1][n + 1] = T[L - 2][n + 1];
+
 
 		if (!params.doCorrection) {
 			continue;
@@ -76,7 +80,18 @@ Solution solve(Params const& params) {
 
 		std::vector<double> Xs = solve_3_diag(system);
 		for (size_t k = 1; k < L; k++) {
-			X[k][n + 1] = Xs[k - 1];
+			/*if (Xs[k - 1] < 0 || Xs[k - 1] > 1) {
+				std::cerr << "Xs[k - 1] == " << Xs[k - 1] << std::endl;
+			}*/
+			/*if (Xs[k - 1] < 0) {
+				Xs[k - 1] = -1;
+			}
+			if (Xs[k - 1] > 1) {
+				Xs[k - 1] = 2;
+			}*/
+			assert(Xs[k - 1] == Xs[k - 1]);
+			X[k][n + 1] = clamp(Xs[k - 1]);
+			//X[k][n + 1] = Xs[k - 1];
 		}
 		system.clear();
 
@@ -93,7 +108,7 @@ Solution solve(Params const& params) {
 		system.push_back({ a, 1 - a, 0, c });
 		std::vector<double> Ts = solve_3_diag(system);
 		for (size_t k = 1; k < L; k++) {
-			T[k][n + 1] = Ts[k - 1];
+			T[k][n + 1] = clamp(Ts[k - 1], params.T0, params.Tm);
 		}
 		system.clear();
 	}
