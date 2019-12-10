@@ -41,12 +41,14 @@ std::vector <std::string> visualization::gen_names (std::string name, double del
 plots_params::soft::soft
 (
     size_t _step,
+    bool _draw_it,
     double _legend_x,
     double _legend_y,
     std::pair <size_t, size_t> _size_picture,
     std::pair <double, double> _hard_border_x,
     std::pair <double, double> _hard_border_y
 ) :
+    draw_it(_draw_it),
     legend_x(_legend_x),
     legend_y(_legend_y),
     size_picture(_size_picture),
@@ -70,15 +72,74 @@ plots_params::plots_params
     soft_params(_soft_params)
 {}
 
+visualization::need_draw::need_draw
+(
+    bool _W_z,
+    bool _W_t,
+    bool _T_z,
+    bool _T_t,
+    bool _X_z,
+    bool _X_t
+) :
+    W_z(_W_z),
+    W_t(_W_t),
+    T_z(_T_z),
+    T_t(_T_t),
+    X_z(_X_z),
+    X_t(_X_t)
+{}
+
 visualization::visualization
 (
     Params const & _args,
 
+    plots_params W_z_params,
+    plots_params W_t_params,
     plots_params T_z_params,
     plots_params T_t_params,
     plots_params X_z_params,
     plots_params X_t_params
 ) :
+    is_draw 
+    (
+        W_z_params.soft_params.draw_it, 
+        W_t_params.soft_params.draw_it, 
+        T_z_params.soft_params.draw_it, 
+        T_t_params.soft_params.draw_it, 
+        X_z_params.soft_params.draw_it, 
+        X_t_params.soft_params.draw_it
+    ),
+    
+    plots_W_z
+    (
+        gen_names(W_z_params.axix_t_name, _args.delta_z, {0, _args.max_z}, _args.N()),
+        W_z_params.file_name,
+        W_z_params.axix_x_name,
+        W_z_params.axix_y_name,
+        1,
+        W_z_params.soft_params.legend_x,
+        W_z_params.soft_params.legend_y,
+        W_z_params.soft_params.size_picture,
+        W_z_params.soft_params.hard_border_x,
+        W_z_params.soft_params.hard_border_y,
+        W_z_params.soft_params.step
+    ),
+
+    plots_W_t
+    (
+        gen_names(W_t_params.axix_t_name, _args.delta_t, {0, _args.max_t}, _args.N()),
+        W_t_params.file_name,
+        W_t_params.axix_x_name,
+        W_t_params.axix_y_name,
+        1,
+        W_t_params.soft_params.legend_x,
+        W_t_params.soft_params.legend_y,
+        W_t_params.soft_params.size_picture,
+        W_t_params.soft_params.hard_border_x,
+        W_t_params.soft_params.hard_border_y,
+        W_t_params.soft_params.step
+    ),
+
     plots_T_z
     (
         gen_names(T_z_params.axix_t_name, _args.delta_z, {0, _args.max_z}, _args.N()),
@@ -154,87 +215,85 @@ visualization::visualization
     }
 }
 
-visualization & visualization::add (std::function <Solution (Params const &)> method, std::string method_name)
-{
-
-    Solution solution = method(args);
-
-    //std::cout << solution.T.size() << " " << z.size() << "\n";
-    //std::cout << solution.X.size() << " " << z.size() << "\n";
-
-    //std::cout << solution.T[0].size() << " " << z[0].size() << "\n";
-    //std::cout << solution.X[0].size() << " " << z[0].size() << "\n";
-
-    plots_T_t.add
-    (
-        z,
-        solution.T,
-        method_name
-    );
-
-    plots_T_z.add
-    (
-        transponse(t),
-        transponse(solution.T),
-        method_name
-    );
-
-    plots_X_t.add
-    (
-        z,
-        solution.X,
-        method_name
-    );
-
-    plots_X_z.add
-    (
-        transponse(t),
-        transponse(solution.X),
-        method_name
-    );
-
-    return * this;
-}
-
-/*
-visualization & visualization::add
+visualization & visualization::add 
 (
-    std::function <Solution (Params const &)> method,
+    std::function <Solution (Params const &)> method, 
     std::string method_name,
 
     Params const & _args
 )
 {
-    /Solution solution = method(_args);
+    Solution solution = method(_args);
 
-    plots_T_z.add
-    (
-        z,
-        solution.T,
-        method_name
-    );
+    if (is_draw.W_t) 
+    {
+        plots_W_t.add
+        (
+            z,
+            solution.W,
+            method_name
+        );
+    }
 
-    plots_T_t.add
-    (
-        transponse(t),
-        transponse(solution.T),
-        method_name
-    );
+    if (is_draw.W_z) 
+    {
+        plots_W_z.add
+        (
+            transponse(t),
+            transponse(solution.W),
+            method_name
+        );
+    }
 
-    plots_X_z.add
-    (
-        z,
-        solution.X,
-        method_name
-    );
+    if (is_draw.T_t) 
+    {
+        plots_T_t.add
+        (
+            z,
+            solution.T,
+            method_name
+        );
+    }
 
-    plots_X_t.add
-    (
-        transponse(t),
-        transponse(solution.X),
-        method_name
-    );
+    if (is_draw.T_z) 
+    {
+        plots_T_z.add
+        (
+            transponse(t),
+            transponse(solution.T),
+            method_name
+        );
+    }
+
+    if (is_draw.X_t) 
+    {
+        plots_X_t.add
+        (
+            z,
+            solution.X,
+            method_name
+        );
+    }
+
+    if (is_draw.X_z) 
+    {
+        plots_X_z.add
+        (
+            transponse(t),
+            transponse(solution.X),
+            method_name
+        );
+    }
 
     return * this;
 }
-*/
+
+visualization & visualization::add
+(
+    std::function <Solution (Params const &)> method,
+    std::string method_name
+)
+{
+    return add(method, method_name, args);
+}
+

@@ -29,10 +29,12 @@ int main ()
     (
         p,
 
+        {"pictures/W_z_", "t", "W", "z", plots_params::soft(z_skip)},
+        {"pictures/W_t_", "z", "W", "t", plots_params::soft(t_skip)},
         {"pictures/T_z_", "t", "T", "z", plots_params::soft(z_skip)},
         {"pictures/T_t_", "z", "T", "t", plots_params::soft(t_skip)},
-        {"pictures/X_z_", "t", "X", "z", plots_params::soft(z_skip)},
-        {"pictures/X_t_", "z", "X", "t", plots_params::soft(t_skip)}
+        {"pictures/X_z_", "t", "X", "z", plots_params::soft(z_skip, 0)},
+        {"pictures/X_t_", "z", "X", "t", plots_params::soft(t_skip, 0)}
     );
 
     vis.add(solve,  " ");
