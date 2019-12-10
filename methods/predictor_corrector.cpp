@@ -29,7 +29,7 @@ void calcW(
 	Params const& params) {
 	for (size_t i = 0; i < X.size(); i++) {
 		for (size_t j = 0; j < X[i].size(); j++) {
-			W[i][j] = params.W(X[i][j], T[i][j]);
+			W[i][j] = -params.W(X[i][j], T[i][j]);
 		}
 	}
 }

@@ -90,8 +90,7 @@ plots/%.o: plots/%.cpp ${header_plots_files}
 
 picture_name = pictures/
 video_name = pictures/video
-#resolution = 1280:720
-resolution = 640:360
+resolution = 1280:720
 frame_rate = 30/1
 
 fps = 30
@@ -111,6 +110,13 @@ video_X_z:
 video_X_t:
 	-ffmpeg -r ${frame_rate} -i ${picture_name}X_t_%d.png -codec:v ${encoder} -filter:v "fps=${fps}, format=${pix_fmts}, scale=${resolution}" ${video_name}_X_t.mp4
 
+video_W_z:
+	-ffmpeg -r ${frame_rate} -i ${picture_name}W_z_%d.png -codec:v ${encoder} -filter:v "fps=${fps}, format=${pix_fmts}, scale=${resolution}" ${video_name}_W_z.mp4
 
-video: video_T_z video_T_t video_X_t video_X_z
+video_W_t:
+	-ffmpeg -r ${frame_rate} -i ${picture_name}W_t_%d.png -codec:v ${encoder} -filter:v "fps=${fps}, format=${pix_fmts}, scale=${resolution}" ${video_name}_W_t.mp4
+
+
+video: video_T_z video_T_t video_X_t video_X_z video_W_t video_W_z
+
 #video: video_X_t

@@ -17,7 +17,7 @@ double visualization::get_pos (size_t index, double delta, std::pair <double, do
 }
 
 
-std::string visualization::format (double value, size_t precision = 5, size_t width = 10)
+std::string visualization::format (double value, size_t precision = 5, size_t width = 15)
 {
     std::stringstream ss;
     ss.precision(precision);
