@@ -112,7 +112,7 @@ visualization::visualization
     
     plots_W_z
     (
-        gen_names(W_z_params.axix_t_name, _args.delta_z, {0, _args.max_z}, _args.N()),
+        gen_names(W_z_params.axix_t_name, _args.delta_z, {0, _args.max_z}, _args.L()),
         W_z_params.file_name,
         W_z_params.axix_x_name,
         W_z_params.axix_y_name,
@@ -142,7 +142,7 @@ visualization::visualization
 
     plots_T_z
     (
-        gen_names(T_z_params.axix_t_name, _args.delta_z, {0, _args.max_z}, _args.N()),
+        gen_names(T_z_params.axix_t_name, _args.delta_z, {0, _args.max_z}, _args.L()),
         T_z_params.file_name,
         T_z_params.axix_x_name,
         T_z_params.axix_y_name,
@@ -172,7 +172,7 @@ visualization::visualization
 
     plots_X_z
     (
-        gen_names(X_z_params.axix_t_name, _args.delta_z, {0, _args.max_z}, _args.N()),
+        gen_names(X_z_params.axix_t_name, _args.delta_z, {0, _args.max_z}, _args.L()),
         X_z_params.file_name,
         X_z_params.axix_x_name,
         X_z_params.axix_y_name,
