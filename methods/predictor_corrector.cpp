@@ -22,6 +22,18 @@ void print(std::vector<double> const& v, size_t step) {
 	std::cout << std::endl;
 }
 
+void calcW(
+	std::vector<std::vector<double>> const& X,
+	std::vector<std::vector<double>> const& T,
+	std::vector<std::vector<double>>& W,
+	Params const& params) {
+	for (size_t i = 0; i < X.size(); i++) {
+		for (size_t j = 0; j < X[i].size(); j++) {
+			W[i][j] = params.W(X[i][j], T[i][j]);
+		}
+	}
+}
+
 Solution solve(Params const& params) {
 	size_t L = params.L();
 	size_t N = params.N();
@@ -30,6 +42,7 @@ Solution solve(Params const& params) {
 	//std::cout << "L N == " << L << ' ' << N << std::endl;
 	std::vector<std::vector<double>> X(L, std::vector<double>(N));
 	std::vector<std::vector<double>> T(L, std::vector<double>(N));
+	std::vector<std::vector<double>> W(L, std::vector<double>(N));
 
 	for (size_t n = 0; n < N; n++) {
 		X[0][n] = 0;
@@ -57,13 +70,14 @@ Solution solve(Params const& params) {
 				std::cerr << "X[k][n + 1] == " << X[k][n + 1] << std::endl;
 			}*/
 		}
-		X[L - 1][n + 1] = X[L - 2][n + 1] + (X[L - 1][n] - X[L - 3][n]) * 0.5;
-		X[L - 1][n + 1] = T[L - 2][n + 1] + (T[L - 1][n] - T[L - 3][n]) * 0.5;
-		//X[L - 1][n + 1] = X[L - 2][n + 1];
-		//T[L - 1][n + 1] = T[L - 2][n + 1];
+		//X[L - 1][n + 1] = X[L - 2][n + 1] + (X[L - 1][n] - X[L - 3][n]) * 0.5;
+		//X[L - 1][n + 1] = T[L - 2][n + 1] + (T[L - 1][n] - T[L - 3][n]) * 0.5;
+		X[L - 1][n + 1] = X[L - 2][n + 1];
+		T[L - 1][n + 1] = T[L - 2][n + 1];
 
 
 		if (!params.doCorrection) {
+			calcW(X, T, W, params);
 			continue;
 		}
 		std::vector<quard<double>> system;
@@ -89,10 +103,11 @@ Solution solve(Params const& params) {
 			if (Xs[k - 1] > 1) {
 				Xs[k - 1] = 2;
 			}*/
-			assert(Xs[k - 1] == Xs[k - 1]);
-			X[k][n + 1] = clamp(Xs[k - 1]);
+			//assert(Xs[k - 1] == Xs[k - 1]);
+			X[k][n + 1] = clamp(Xs[k - 1], 0, 10);
 			//X[k][n + 1] = Xs[k - 1];
 		}
+		X[L - 1][n + 1] = X[L - 2][n + 1];
 		system.clear();
 
 
@@ -108,10 +123,16 @@ Solution solve(Params const& params) {
 		system.push_back({ a, 1 - a, 0, c });
 		std::vector<double> Ts = solve_3_diag(system);
 		for (size_t k = 1; k < L; k++) {
-			T[k][n + 1] = clamp(Ts[k - 1], params.T0, params.Tm);
+			//if (Ts[k - 1])
+			//assert(Ts[k - 1] == Ts[k - 1]);
+			//T[k][n + 1] = Ts[k - 1];
+			T[k][n + 1] = clamp(Ts[k - 1], params.T0, params.Tm * 10);
 		}
+		T[L - 1][n + 1] = T[L - 2][n + 1];
 		system.clear();
 	}
 
-	return { X, T };
+	calcW(X, T, W, params);
+
+	return { X, T, W };
 }

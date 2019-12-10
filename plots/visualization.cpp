@@ -165,7 +165,7 @@ visualization & visualization::add (std::function <Solution (Params const &)> me
     //std::cout << solution.T[0].size() << " " << z[0].size() << "\n";
     //std::cout << solution.X[0].size() << " " << z[0].size() << "\n";
 
-    /*plots_T_t.add
+    plots_T_t.add
     (
         z,
         solution.T,
@@ -177,7 +177,7 @@ visualization & visualization::add (std::function <Solution (Params const &)> me
         transponse(t),
         transponse(solution.T),
         method_name
-    );*/
+    );
 
     plots_X_t.add
     (
@@ -186,12 +186,12 @@ visualization & visualization::add (std::function <Solution (Params const &)> me
         method_name
     );
 
-    /*plots_X_z.add
+    plots_X_z.add
     (
         transponse(t),
         transponse(solution.X),
         method_name
-    );*/
+    );
 
     return * this;
 }

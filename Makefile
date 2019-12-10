@@ -90,7 +90,8 @@ plots/%.o: plots/%.cpp ${header_plots_files}
 
 picture_name = pictures/
 video_name = pictures/video
-resolution = 1280:720
+#resolution = 1280:720
+resolution = 640:360
 frame_rate = 30/1
 
 fps = 30

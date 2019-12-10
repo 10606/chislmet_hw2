@@ -60,7 +60,7 @@ struct Params {
 };
 
 struct Solution {
-	std::vector<std::vector<double>> X, T;
+	std::vector<std::vector<double>> X, T, W;
 };
 
 Solution solve(Params const& params);
