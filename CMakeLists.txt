@@ -44,21 +44,25 @@ set(plots_source_files
     plots/visualization.cpp
 )
 
-set( RUNTIME_OUTPUT_DIRECTORY plots)
-add_executable(plots_main.elf
+add_executable(plots_main.cpp.elf
     plots/plots_main.cpp 
     ${plots_source_files}
     ${method_source_files}
 )
-#target_sources(plots_main.elf)
+set_target_properties(plots_main.cpp.elf
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY plots
+)
 
-target_link_libraries(plots_main.elf
+#target_sources(plots_main.cpp.elf)
+
+target_link_libraries(plots_main.cpp.elf
     ${math_gl_lib_name}
     pthread
 )
 
 
-add_custom_target(pictures ALL DEPENDS plots_main.elf
+add_custom_target(pictures ALL DEPENDS plots_main.cpp.elf
     COMMAND make -f ${CMAKE_CURRENT_SOURCE_DIR}/Makefile.part pictures
 )
 
