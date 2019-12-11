@@ -47,12 +47,11 @@ target_link_libraries(plots_main.elf
 )
 
 
-add_custom_target(video
-    COMMAND make -f ${CMAKE_CURRENT_SOURCE_DIR}/Makefile.part video
+add_custom_target(pictures ALL DEPENDS plots_main.elf
+    COMMAND make -f ${CMAKE_CURRENT_SOURCE_DIR}/Makefile.part pictures
 )
 
-add_custom_target(pictures
-    COMMAND make plots_main.elf
-    COMMAND make -f ${CMAKE_CURRENT_SOURCE_DIR}/Makefile.part pictures
+add_custom_target(video 
+    COMMAND make -f ${CMAKE_CURRENT_SOURCE_DIR}/Makefile.part video
 )
 
