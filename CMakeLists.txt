@@ -2,6 +2,17 @@ cmake_minimum_required(VERSION 3.0)
 
 project(kursach VERSION 1.0 LANGUAGES C CXX)
 
+execute_process (
+    COMMAND bash -c "lsb_release -si"
+    OUTPUT_VARIABLE host_distr
+)
+
+if (${host_distr} STREQUAL "Ubuntu\n")
+    set(math_gl_lib_name mgl)
+else()
+    set(math_gl_lib_name mgl2)
+endif()
+
 set(release_flags
     "-O3 -mtune=native -march=native -g -Wall -ftemplate-depth=10000 -std=c++17"
 )
@@ -42,7 +53,7 @@ add_executable(plots_main.elf
 #target_sources(plots_main.elf)
 
 target_link_libraries(plots_main.elf
-    mgl2
+    ${math_gl_lib_name}
     pthread
 )
 
