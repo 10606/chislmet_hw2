@@ -59,16 +59,23 @@ Solution solve(Params const& params) {
 	for (size_t n = 0; n < N - 1; n++) {
 		for (size_t k = 1; k < L - 1; k++) {
 			double dz2 = params.delta_z * params.delta_z;
+			/*
 			X[k][n + 1] = X[k][n] + params.delta_t * (
 				params.D * (X[k + 1][n] - 2 * X[k][n] + X[k - 1][n]) / dz2 +
 				params.W(X[k][n], T[k][n]));
 			T[k][n + 1] = T[k][n] + params.delta_t * (
 				params.kappa() * (T[k + 1][n] - 2 * T[k][n] + T[k - 1][n]) / dz2 -
 				params.Q / params.C * params.W(X[k][n], T[k][n]));
-			//X[k][n + 1] = clamp(X[k][n + 1]);
-			/*if (X[k][n + 1] < 0 || X[k][n + 1] > 1) {
-				std::cerr << "X[k][n + 1] == " << X[k][n + 1] << std::endl;
-			}*/
+			*/
+
+			double mod_W = params.W(X[k][n], T[k][n], params.alpha - 1);
+			X[k][n + 1] = (X[k][n] + params.D * params.delta_t / dz2 * (X[k + 1][n] - 2 * X[k][n] + X[k - 1][n])) /
+				(1 - params.delta_t * mod_W);
+
+			T[k][n + 1] = T[k][n] + params.delta_t * (
+				params.kappa() * (T[k + 1][n] - 2 * T[k][n] + T[k - 1][n]) / dz2 -
+				params.Q / params.C * (X[k][n + 1] * mod_W));
+
 		}
 		//X[L - 1][n + 1] = X[L - 2][n + 1] + (X[L - 1][n] - X[L - 3][n]) * 0.5;
 		//X[L - 1][n + 1] = T[L - 2][n + 1] + (T[L - 1][n] - T[L - 3][n]) * 0.5;
@@ -103,9 +110,10 @@ Solution solve(Params const& params) {
 			if (Xs[k - 1] > 1) {
 				Xs[k - 1] = 2;
 			}*/
+			//assert((!std::isnan(Xs[k - 1])));
 			//assert(Xs[k - 1] == Xs[k - 1]);
-			X[k][n + 1] = clamp(Xs[k - 1], 0, 10);
-			//X[k][n + 1] = Xs[k - 1];
+			//X[k][n + 1] = clamp(Xs[k - 1], 0, 10);
+			X[k][n + 1] = Xs[k - 1];
 		}
 		X[L - 1][n + 1] = X[L - 2][n + 1];
 		system.clear();
@@ -123,10 +131,9 @@ Solution solve(Params const& params) {
 		system.push_back({ a, 1 - a, 0, c });
 		std::vector<double> Ts = solve_3_diag(system);
 		for (size_t k = 1; k < L; k++) {
-			//if (Ts[k - 1])
 			//assert(Ts[k - 1] == Ts[k - 1]);
-			//T[k][n + 1] = Ts[k - 1];
-			T[k][n + 1] = clamp(Ts[k - 1], params.T0, params.Tm * 10);
+			T[k][n + 1] = Ts[k - 1];
+			//T[k][n + 1] = clamp(Ts[k - 1], params.T0, params.Tm * 10);
 		}
 		T[L - 1][n + 1] = T[L - 2][n + 1];
 		system.clear();

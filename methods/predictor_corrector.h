@@ -27,18 +27,18 @@ struct Params {
 	double delta_z = deltaH() * 0.1;
 	double max_z = delta_z * 10;
 	double max_t = delta_t * 1000;
-	bool doCorrection = false;
+	bool doCorrection = true;
 
 	double kappa() const {
 		return lambda / (rho * C);
 	}
 
-	double W(double X, double T) const {
-		/*if (T < 0.01) {
-			T = 0.01;
-		}
-		X = clamp(X);*/
+	double W(double X, double T, double alpha) const {
 		return -K * pow(X, alpha) * exp(-E / (R * T));
+	}
+
+	double W(double X, double T) const {
+		return W(X, T, alpha);
 	}
 
 	double U() const {
