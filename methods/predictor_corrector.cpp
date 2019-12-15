@@ -70,10 +70,10 @@ Solution solve(Params const& params) {
 
 			double mod_W = params.W(X[k][n], T[k][n], params.alpha - 1);
 			X[k][n + 1] = (X[k][n] + params.D * params.delta_t / dz2 * (X[k + 1][n] - 2 * X[k][n] + X[k - 1][n])) /
-				(1 + params.delta_t * mod_W);
+				(1 - params.delta_t * mod_W);
 
 			T[k][n + 1] = T[k][n] + params.delta_t * (
-				params.kappa() * (T[k + 1][n] - 2 * T[k][n] + T[k - 1][n]) / dz2 +
+				params.kappa() * (T[k + 1][n] - 2 * T[k][n] + T[k - 1][n]) / dz2 -
 				params.Q / params.C * (X[k][n + 1] * mod_W));
 
 		}
