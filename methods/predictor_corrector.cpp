@@ -57,10 +57,11 @@ Solution solve(Params const& params) {
 	}
 	//print(X);
 	for (size_t n = 0; n < N - 1; n++) {
+#if 0
 		for (size_t k = 1; k < L - 1; k++) {
 			double dz2 = params.delta_z * params.delta_z;
-			/*
-			X[k][n + 1] = X[k][n] + params.delta_t * (
+
+			/*X[k][n + 1] = X[k][n] + params.delta_t * (
 				params.D * (X[k + 1][n] - 2 * X[k][n] + X[k - 1][n]) / dz2 +
 				params.W(X[k][n], T[k][n]));
 			T[k][n + 1] = T[k][n] + params.delta_t * (
@@ -81,7 +82,7 @@ Solution solve(Params const& params) {
 		//X[L - 1][n + 1] = T[L - 2][n + 1] + (T[L - 1][n] - T[L - 3][n]) * 0.5;
 		X[L - 1][n + 1] = X[L - 2][n + 1];
 		T[L - 1][n + 1] = T[L - 2][n + 1];
-
+#endif
 
 		if (!params.doCorrection) {
 			calcW(X, T, W, params);
@@ -90,53 +91,53 @@ Solution solve(Params const& params) {
 		std::vector<quard<double>> system;
 		double a = -params.D * params.delta_t / (params.delta_z * params.delta_z);
 		double b = 1 - 2 * a;
-		double c = X[1][n] + params.delta_t * params.W(X[1][n + 1], T[1][n + 1]);
+		double c = X[1][n] + params.delta_t * params.W(X[1][n], T[1][n]);
+		//double c = X[1][n] + params.delta_t * params.W(X[1][n + 1], T[1][n + 1]);
 		system.push_back({ 0, b, a, c });
 		for (size_t k = 2; k < L - 1; k++) {
-			c = X[k][n] + params.delta_t * params.W(X[k][n + 1], T[k][n + 1]);
+			c = X[k][n] + params.delta_t * params.W(X[k][n], T[k][n]);
+			//c = X[k][n] + params.delta_t * params.W(X[k][n + 1], T[k][n + 1]);
 			system.push_back({ a, b, a, c });
 		}
-		c = X[L - 1][n] + params.delta_t * params.W(X[L - 1][n + 1], T[L - 1][n + 1]);
+		c = X[L - 1][n] + params.delta_t * params.W(X[L - 1][n], T[L - 1][n]);
+		//c = X[L - 1][n] + params.delta_t * params.W(X[L - 1][n + 1], T[L - 1][n + 1]);
 		system.push_back({ a, 1 - a, 0, c });
 
 		std::vector<double> Xs = solve_3_diag(system);
-		for (size_t k = 1; k < L; k++) {
-			/*if (Xs[k - 1] < 0 || Xs[k - 1] > 1) {
-				std::cerr << "Xs[k - 1] == " << Xs[k - 1] << std::endl;
-			}*/
-			/*if (Xs[k - 1] < 0) {
-				Xs[k - 1] = -1;
-			}
-			if (Xs[k - 1] > 1) {
-				Xs[k - 1] = 2;
-			}*/
-			//assert((!std::isnan(Xs[k - 1])));
-			//assert(Xs[k - 1] == Xs[k - 1]);
-			//X[k][n + 1] = clamp(Xs[k - 1], 0, 10);
-			X[k][n + 1] = Xs[k - 1];
-		}
-		X[L - 1][n + 1] = X[L - 2][n + 1];
+
 		system.clear();
+
+
 
 
 		a = -params.kappa() * params.delta_t / (params.delta_z * params.delta_z);
 		b = 1 - 2 * a;
-		c = T[1][n] - a * params.Tm - params.delta_t * params.Q / params.C * params.W(X[1][n + 1], T[1][n + 1]);
+		c = T[1][n] - a * params.Tm - params.delta_t * params.Q / params.C * params.W(X[1][n], T[1][n]);
+		//c = T[1][n] - a * params.Tm - params.delta_t * params.Q / params.C * params.W(X[1][n + 1], T[1][n + 1]);
 		system.push_back({ 0, b, a, c });
 		for (size_t k = 2; k < L - 1; k++) {
-			c = T[k][n] - params.delta_t * params.Q / params.C * params.W(X[k][n + 1], T[k][n + 1]);
+			c = T[k][n] - params.delta_t * params.Q / params.C * params.W(X[k][n], T[k][n]);
+			//c = T[k][n] - params.delta_t * params.Q / params.C * params.W(X[k][n + 1], T[k][n + 1]);
 			system.push_back({ a, b, a, c });
 		}
-		c = T[L - 1][n] - params.delta_t * params.Q / params.C * params.W(X[L - 1][n + 1], T[L - 1][n + 1]);
+		c = T[L - 1][n] - params.delta_t * params.Q / params.C * params.W(X[L - 1][n], T[L - 1][n]);
+		//c = T[L - 1][n] - params.delta_t * params.Q / params.C * params.W(X[L - 1][n + 1], T[L - 1][n + 1]);
 		system.push_back({ a, 1 - a, 0, c });
 		std::vector<double> Ts = solve_3_diag(system);
+
+
 		for (size_t k = 1; k < L; k++) {
-			//assert(Ts[k - 1] == Ts[k - 1]);
+			X[k][n + 1] = Xs[k - 1];
 			T[k][n + 1] = Ts[k - 1];
-			//T[k][n + 1] = clamp(Ts[k - 1], params.T0, params.Tm * 10);
+			/*if (Xs[k - 1] != Xs[k - 1]) {
+				std::cout << n << std::endl;
+				exit(1);
+			}*/
+			//assert(Xs[k - 1] == Xs[k - 1]);
+			//assert(Ts[k - 1] == Ts[k - 1]);
 		}
+		X[L - 1][n + 1] = X[L - 2][n + 1];
 		T[L - 1][n + 1] = T[L - 2][n + 1];
-		system.clear();
 	}
 
 	calcW(X, T, W, params);
