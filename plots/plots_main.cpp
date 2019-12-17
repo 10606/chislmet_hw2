@@ -29,8 +29,10 @@ int main ()
 
         {"pictures/W_z_", "t", "-W", "z", plots_params::soft(next_step_by(z_skip), 0)},
         {"pictures/W_t_", "z", "-W", "t", plots_params::soft(next_step_by(t_skip), 0, 1.49, 1.79, {1280, 720})},
-        {"pictures/T_z_", "t", "T", "z", plots_params::soft(next_step_by(z_skip), 0)},
-        {"pictures/T_t_", "z", "T", "t", plots_params::soft(next_step_by(t_skip), 0)},
+        {"pictures/T_z_", "t", "T", "z", plots_params::soft(next_step_by(z_skip), 1, 1.49, 1.79, {1280, 720}, 
+            {- std::numeric_limits <double> :: infinity(), std::numeric_limits <double> :: infinity()}, {0., 1000.})},
+        {"pictures/T_t_", "z", "T", "t", plots_params::soft(next_step_by(t_skip), 1, 1.49, 1.79, {1280, 720}, 
+            {- std::numeric_limits <double> :: infinity(), std::numeric_limits <double> :: infinity()}, {0., 1000.})},
         {"pictures/X_z_", "t", "X", "z", plots_params::soft(next_step_with_center(100, 150, z_skip), 0)},
         {"pictures/X_t_", "z", "X", "t", plots_params::soft(next_step_with_center(100, 150, t_skip), 1)}
     );
