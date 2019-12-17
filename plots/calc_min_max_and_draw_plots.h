@@ -3,6 +3,7 @@
 
 #include "plots_utils.h"
 #include "plots.h"
+#include <functional>
 
 extern const std::vector <std::string> plots_color;
 
