@@ -2,6 +2,19 @@
 
 const std::vector <std::string> plots_color = {"b", "g", "r", "E", "c", "m", "q", "p", "k"};
 
+
+next_step_by::next_step_by (size_t _step) :
+    cur_pos(0),
+    step(_step)
+{}
+
+size_t next_step_by::operator () ()
+{
+    return cur_pos += step;
+}
+
+
+
 draw_plot::draw_plot
 (
     std::string _name,
@@ -110,7 +123,7 @@ draw_plots::draw_plots
     std::pair <size_t, size_t> _size_picture,
     std::pair <double, double> _hard_border_x,
     std::pair <double, double> _hard_border_y,
-    size_t _step
+    std::function <size_t ()> _step
 ) :
     name(_name),
     file_name(_file_name),
@@ -182,7 +195,7 @@ draw_plots::~draw_plots ()
 
     size_t pic_index = 0;
     //std::cout << "x_values[0].size() y_values[0].size() == " << x_values[0].size() << ' ' << y_values[0].size() << std::endl;
-    for (size_t j = 0; j < x_values[0].size(); j += step, pic_index++)
+    for (size_t j = 0; j < x_values[0].size(); j = step(), pic_index++)
     {
         std::string cur_file_name = file_name + std::to_string(pic_index);
         std::cout << cur_file_name <<  " " << name[j] << "\n";

@@ -6,6 +6,16 @@
 
 extern const std::vector <std::string> plots_color;
 
+struct next_step_by
+{
+    next_step_by (size_t _step = 1);
+    size_t operator () ();
+
+private:
+    size_t cur_pos;
+    size_t step;
+};
+
 struct draw_plot
 {
     draw_plot
@@ -69,7 +79,7 @@ struct draw_plots
         std::pair <size_t, size_t> _size_picture = {1920, 1080},
         std::pair <double, double> _hard_border_x = {- std::numeric_limits <double> :: infinity(), std::numeric_limits <double> :: infinity()},
         std::pair <double, double> _hard_border_y = {-100., 100.},
-        size_t _step = 1
+        std::function <size_t ()> _step = next_step_by(1)
     );
 
     void add
@@ -94,7 +104,7 @@ private:
     std::pair <size_t, size_t> size_picture;
     std::pair <double, double> hard_border_x;
     std::pair <double, double> hard_border_y;
-    size_t step;
+    std::function <size_t ()> step;
 
 
     size_t color_pos;

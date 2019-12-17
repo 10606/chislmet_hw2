@@ -6,6 +6,9 @@
 #include <sstream>
 #include <iomanip>
 
+
+
+
 size_t visualization::get_len (double delta, std::pair <double, double> range)
 {
     return (delta + range.second - range.first) / delta;
@@ -40,7 +43,7 @@ std::vector <std::string> visualization::gen_names (std::string name, double del
 
 plots_params::soft::soft
 (
-    size_t _step,
+    std::function <size_t ()> _step,
     bool _draw_it,
     double _legend_x,
     double _legend_y,

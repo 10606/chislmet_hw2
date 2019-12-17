@@ -20,7 +20,7 @@ struct plots_params
     {
         soft
         (
-            size_t _step = 1,
+            std::function <size_t ()> _step = next_step_by(1),
             bool _draw_it = 1,
             double _legend_x = 1.49,
             double _legend_y = 1.79,
@@ -37,7 +37,7 @@ struct plots_params
         std::pair <size_t, size_t> size_picture;
         std::pair <double, double> hard_border_x;
         std::pair <double, double> hard_border_y;
-        size_t step;
+        std::function <size_t ()> step;
     } soft_params;
 
     plots_params
