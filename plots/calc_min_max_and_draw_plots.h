@@ -16,6 +16,19 @@ private:
     size_t step;
 };
 
+
+struct next_step_with_center
+{
+    next_step_with_center (size_t _left, size_t _right, size_t _step, size_t _step_in_center = 1);
+    size_t operator () ();
+
+private:
+    size_t cur_pos;
+    size_t step, step_in_center;
+    size_t left;
+    size_t right;
+};
+
 struct draw_plot
 {
     draw_plot

@@ -14,6 +14,29 @@ size_t next_step_by::operator () ()
 }
 
 
+next_step_with_center::next_step_with_center (size_t _left, size_t _right, size_t _step, size_t _step_in_center) :
+    cur_pos(0),
+    step(_step),
+    step_in_center(_step_in_center),
+    left(_left),
+    right(_right)
+{}
+
+size_t next_step_with_center::operator () ()
+{
+    if (cur_pos < left)
+    {
+        return cur_pos += step;
+    }
+    else if (cur_pos < right)
+    {
+        return cur_pos += step_in_center;
+    }
+    else
+    {
+        return cur_pos += step;
+    }
+}
 
 draw_plot::draw_plot
 (
